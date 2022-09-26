@@ -44,7 +44,7 @@ namespace PAeroporto
             Console.WriteLine("Lista de Passageiros:");
             foreach (Passageiro item in listaPassageiros)
             {
-                if (item.Situacao == 'A')
+                //if (item.Situacao == 'A')
                     Console.WriteLine(item.ToString());
             }
 
@@ -53,7 +53,7 @@ namespace PAeroporto
 
             foreach (Passageiro item in listaPassageiros)
             {
-                if (item.Situacao == 'A')
+                //if (item.Situacao == 'A')
                 {
                     if (item.CPF == cpf)
                         this.Passageiro = item;

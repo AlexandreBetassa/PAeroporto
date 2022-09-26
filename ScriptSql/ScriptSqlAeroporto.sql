@@ -1,5 +1,7 @@
 create database aeroporto;
 
+drop database aeroporto;
+
 create table passageiro(
 cpf varchar(11) constraint pk_passageiro primary key not null,
 nome varchar(50) not null,
@@ -7,7 +9,7 @@ dataNasc date not null,
 sexo varchar(10) not null,
 ultimaCompra date,
 dataCad date not null, 
-situacao varchar(10),
+situacao char(1)
 );
 
 
@@ -30,9 +32,7 @@ razaoSocial varchar not null,
 dataAbertura date not null,
 dataCadastro date not null,
 ultimoVoo date not null,
-situacao varchar not null,
-
-
+situacao char(1)
 );
 
 create table aeronave(
@@ -40,7 +40,7 @@ inscAeronave varchar(6) constraint pk_aeronave primary key not null,
 cnpjCompAerea varchar(14) foreign key references companhiaAerea(cnpj) not null,
 capacidade int not null,
 ultimaVenda date not null,
-situacao varchar not null,
+situacao char(1),
 dataCadastro date not null,
 );
 
@@ -57,7 +57,8 @@ destino varchar(3) foreign key references iatas(sigla) not null,
 aeronave varchar(6) foreign key references aeronave(inscAeronave) not null,
 dataVoo date not null,
 dataCadastro date not null,
-situacao varchar not null,
+situacao char(1),
+
 );
 
 create table passagem(
@@ -65,7 +66,8 @@ idVoo int foreign key references voo(idVoo),
 idPassagem int identity primary key,
 aeronave varchar(6) foreign key references aeronave (inscAeronave),
 valor float not null,
-situacao varchar not null
+situacao char(1)
+
 );
 
 

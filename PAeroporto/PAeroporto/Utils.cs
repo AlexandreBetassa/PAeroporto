@@ -187,7 +187,7 @@ namespace PAeroporto
             int valor;
             do
             {
-                Console.Write($"{texto}: ");
+                Console.Write(texto);
                 if (!int.TryParse(Console.ReadLine(), out valor) || valor < 0)
                 {
                     Console.WriteLine("Informe uma opção válida...");
@@ -201,7 +201,7 @@ namespace PAeroporto
             char valor;
             do
             {
-                Console.Write($"{texto}: ");
+                Console.Write(texto);
                 if (!char.TryParse(Console.ReadLine().ToUpper(), out valor))
                 {
                     Console.WriteLine("Informe uma opção válida...");
@@ -215,7 +215,7 @@ namespace PAeroporto
             string valor;
             do
             {
-                Console.WriteLine(texto);
+                Console.Write(texto);
                 valor = Console.ReadLine();
                 if (String.IsNullOrWhiteSpace(valor))
                 {

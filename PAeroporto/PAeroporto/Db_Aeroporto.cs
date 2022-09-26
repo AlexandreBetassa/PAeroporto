@@ -9,7 +9,7 @@ namespace PAeroporto
 {
     internal class Db_Aeroporto
     {
-        string conexao = "Data Source = DESKTOP-49RHHLK\\MSSQL;Initial Catalog=ong_adocao;Persist Security Info=True;User ID=sa;Password=834500";
+        string conexao = "Data Source = localhost\\MSSQL;Initial Catalog=aeroporto;Persist Security Info=True;User ID=sa;Password=834500";
         SqlConnection conn = new SqlConnection();
 
         public Db_Aeroporto()
@@ -23,13 +23,16 @@ namespace PAeroporto
             int row;
             try
             {
+                conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 row = cmd.ExecuteNonQuery();
             }
             catch (SqlException msg)
             {
                 if (msg.Number == 2627) Console.WriteLine($"Já existe o passageiro cadastrado!!!");
-                if (msg.Number == 2628) Console.WriteLine($"Valores truncados da coluna!!!");
+                else if (msg.Number == 2628) Console.WriteLine($"Valores truncados da coluna!!!");
+                else Console.WriteLine($"Erro código: {msg.Number}");
+                Utils.Pause();
             }
             conn.Close();
         }
