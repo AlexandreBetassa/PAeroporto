@@ -6,7 +6,8 @@ namespace PAeroporto
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Passageiro p = new Passageiro();
+            p.CadastrarPassageiro();
         }
     }
 }
