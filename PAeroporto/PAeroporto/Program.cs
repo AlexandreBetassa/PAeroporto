@@ -28,10 +28,10 @@ namespace PAeroporto
                         Console.Clear();
                         MenuCompanhia();
                         break;
-                    //case 3:
-                    //    Console.Clear();
-                    //    MenuAeronave(listaAeronaves, ListaCompanhiaAereas);
-                    //    break;
+                    case 3:
+                        Console.Clear();
+                        MenuAeronave();
+                        break;
                     //case 4:
                     //    Console.Clear();
                     //    MenuVoo(listaVoos, listaIatas, listaAeronaves);
@@ -200,6 +200,49 @@ namespace PAeroporto
                         break;
                 }
                 Utils.Pause();
+            } while (true);
+        }
+
+        public static void MenuAeronave()
+        {
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("### MENU AERONAVE ###");
+                Console.WriteLine("1 - Cadastrar Aeronave");
+                Console.WriteLine("2 - Buscar Aeronave");
+                Console.WriteLine("3 - Editar Aeronave");
+                Console.WriteLine("4 - Listar Aeronaves");
+                Console.WriteLine("0 - Sair do Menu de Aeronaves");
+                Console.Write("Opção: ");
+                int opc = int.Parse(Console.ReadLine());
+
+                switch (opc)
+                {
+                    case 1:
+                        Aeronave aeronave = new Aeronave();
+                        aeronave.CadastroAeronave();
+                        break;
+                        //case 2:
+                        //    Console.Write("Informe a Inscrição da Aeronave para busca: ");
+                        //    string inscricao = Console.ReadLine();
+                        //    Console.WriteLine(BuscarAeronave(listaAeronaves, inscricao).ToString());
+                        //    break;
+                        //case 3:
+                        //    EditarAeronave(listaAeronaves);
+                        //    break;
+                        //case 4:
+                        //    foreach (Aeronave item in listaAeronaves)
+                        //        if (item.Situacao == 'A')
+                        //            Console.WriteLine(item.ToString() + "\n");
+                        //    break;
+                        //case 0:
+                        //    Console.WriteLine("Você saiu do Menu de Aeronaves!");
+                        return;
+                    default:
+                        Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
+                        break;
+                }
             } while (true);
         }
 

@@ -41,7 +41,6 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-
         public bool SelectTable(string sql)
         {
             try
@@ -77,7 +76,6 @@ namespace PAeroporto
             conn.Close();
             return true;
         }
-
         public bool SelectTableCA(string sql)
         {
             bool aux = false;
@@ -113,7 +111,6 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-
         public bool VerificarDados(string sql)
         {
             bool aux;
@@ -125,7 +122,6 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-
         public bool VerificarDados(SqlDataReader r)
         {
             bool aux;
@@ -198,6 +194,24 @@ namespace PAeroporto
                 Console.WriteLine($"Erro código {msg.Number}");
             }
             return aux;
+        }
+
+        public string getDadoTable(string sql)
+        {
+            string texto = "";
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.Read()) texto = r.GetString(0);
+
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            return texto;
         }
 
     }
