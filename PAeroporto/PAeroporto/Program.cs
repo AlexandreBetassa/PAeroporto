@@ -24,10 +24,10 @@ namespace PAeroporto
                         Console.Clear();
                         MenuPassageiro();
                         break;
-                    //case 2:
-                    //    Console.Clear();
-                    //    MenuCompanhia(ListaCompanhiaAereas, listaCnpjRestrito);
-                    //    break;
+                    case 2:
+                        Console.Clear();
+                        MenuCompanhia();
+                        break;
                     //case 3:
                     //    Console.Clear();
                     //    MenuAeronave(listaAeronaves, ListaCompanhiaAereas);
@@ -125,8 +125,9 @@ namespace PAeroporto
                         break;
                     case 8:
                         Console.Clear();
-                        Console.WriteLine("### REMOVER CPF RESTRITO ###\n");
-                        ListarCpfRestrito();
+                        Console.WriteLine("### LISTAR CPFs RESTRITO ###\n");
+                        Db_Aeroporto db = new Db_Aeroporto();
+                        if (!db.SelectRestritos("SELECT cpf FROM dbo.restritos")) Console.WriteLine("Não há CPFs inscritos nessa lista"); ;
                         Utils.Pause();
                         break;
                     default:
@@ -136,6 +137,72 @@ namespace PAeroporto
                 }
             } while (true);
         }
+        public static void MenuCompanhia()
+        {
+            int opc;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("### MENU OPÇÕES DA COMPANHIA AÉREA ###");
+                Console.WriteLine("1 - Cadastrar Companhia");
+                Console.WriteLine("2 - Buscar Companhia");
+                Console.WriteLine("3 - Editar Companhia");
+                Console.WriteLine("4 - Listar Companhias Ativas");
+                Console.WriteLine("5 - Listar Companhias Inativas");
+                Console.WriteLine("6 - Inserir CNPJ na Llista de Empresas Bloqueados");
+                Console.WriteLine("7 - Remover CNPJ na Lista de Empresas Bloqueados");
+                Console.WriteLine("8 - Listar CNPJs bloqueado");
+                Console.WriteLine("0 - Sair do Menu de Companhias");
+                opc = Utils.ColetarValorInt("Informe a opção: ");
+
+                switch (opc)
+                {
+                    case 1:
+                        CompanhiaAerea companhia = new CompanhiaAerea();
+                        companhia.CadastrarCompainhaAerea();
+                        break;
+                    case 2:
+                        CompanhiaAerea.LocalizarCompanhiaAerea();
+                        break;
+                    case 3:
+                        CompanhiaAerea.Editar();
+                        break;
+                    case 4:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR COMPANHIAS AÉREAS ATIVAS ###");
+                        CompanhiaAerea.ListarCompanhias('A');
+                        break;
+                    case 5:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR COMPANHIAS AÉREAS INATIVAS ###");
+                        CompanhiaAerea.ListarCompanhias('I');
+                        break;
+                    case 6:
+                        Console.Clear();
+                        Console.WriteLine("### CADASTRAR CNPJ BLOQUEADO ###");
+                        CadastrarCnpjBloqueado();
+                        break;
+                    case 7:
+                        Console.Clear();
+                        Console.WriteLine("### REMOVER CNPJ BLOQUEADO ###");
+                        RemoverCnpjBloqueado();
+                        break;
+                    case 8:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR CNPJs BLOQUEADO ###");
+                        Db_Aeroporto db = new Db_Aeroporto();
+                        if (!db.SelectBloqueados("SELECT cnpj FROM dbo.bloqueados")) Console.WriteLine("Não há CNPJs inscritos nessa lista");
+                        break;
+                    case 0:
+                        return;
+                    default:
+                        Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
+                        break;
+                }
+                Utils.Pause();
+            } while (true);
+        }
+
         #endregion Menus
 
         #region passageiro
@@ -169,13 +236,45 @@ namespace PAeroporto
             else Console.WriteLine("Solicitação efetuado com sucesso");
         }
 
-        static void ListarCpfRestrito()
-        {
-            string sql = "SELECT cpf FROM dbo.restritos";
-            Db_Aeroporto db = new Db_Aeroporto();
-            db.SelectRestritos(sql);
-        }
         #endregion passageiro
+
+        #region Companhia aerea
+
+        static void CadastrarCnpjBloqueado()
+        {
+            string cnpj;
+            do
+            {
+                cnpj = Utils.ColetarString("Informe o CNPJ que irá ser cadastrado na lista de restritos: ");
+                if (!Utils.ValidarCnpj(cnpj)) Console.WriteLine("CNPJ inválido");
+                else break;
+            } while (true);
+            Db_Aeroporto db = new Db_Aeroporto();
+            string sql = $"INSERT INTO dbo.bloqueados (cnpj) values ('{cnpj}')";
+            if (!db.InsertTable(sql)) Console.WriteLine("Ocorreu um erro na solicitação");
+            else Console.WriteLine("Solicitação efetuado com sucesso");
+        }
+
+        static void RemoverCnpjBloqueado()
+        {
+            string cnpj;
+            do
+            {
+                cnpj = Utils.ColetarString("Informe o CNPJ que irá ser removido da lista de bloqueados: ");
+                if (!Utils.ValidarCnpj(cnpj)) Console.WriteLine("CNPJ inválido");
+                else break;
+            } while (true);
+            Db_Aeroporto db = new Db_Aeroporto();
+            string sql = $"DELETE FROM dbo.bloqueados WHERE cnpj = '{cnpj}'";
+            if (!db.InsertTable(sql)) Console.WriteLine("Ocorreu um erro na solicitação");
+            else Console.WriteLine("Solicitação efetuado com sucesso");
+        }
+
+
+
+
+        #endregion Companhia aerea
+
 
     }
 }

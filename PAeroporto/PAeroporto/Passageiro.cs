@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using PAeroporto;
 
 namespace PAeroporto
@@ -63,6 +64,7 @@ namespace PAeroporto
             Console.WriteLine("1 - Editar NOME cadastrado");
             Console.WriteLine("2 - Editar SEXO cadastrado");
             Console.WriteLine("3 - Inativar CADASTRO");
+            Console.WriteLine("4 - Ativar CADASTRO");
             int op = Utils.ColetarValorInt("Informe opção que deseja editar: ");
             switch (op)
             {
@@ -80,6 +82,9 @@ namespace PAeroporto
                     break;
                 case 3:
                     InativarCadastro(db, cpf);
+                    break;
+                case 4:
+                    AtivarCadastro(db, cpf);
                     break;
                 default:
                     Console.WriteLine("Operação inválida");
@@ -101,6 +106,22 @@ namespace PAeroporto
             if (!db.UpdateTable(sql)) Console.WriteLine("Erro na solicitação");
             else Console.WriteLine("Solicitação efetuada com sucesso!!!");
         }
+
+        public static void AtivarCadastro(Db_Aeroporto db, string cpf)
+        {
+            int confirmar;
+            do
+            {
+                confirmar = Utils.ColetarValorInt("Confirmar Ativação do passageiro\n(1 - Sim)\n(2 - Não)\nInforme Opção: ");
+                if (confirmar != 1 && confirmar != 2) Console.WriteLine("Opção inválida");
+                else break;
+            } while (confirmar != 1 && confirmar != 2);
+            if (confirmar == 2) return;
+            string sql = $"UPDATE dbo.passageiro set situacao = 'A' WHERE cpf = {cpf}";
+            if (!db.UpdateTable(sql)) Console.WriteLine("Erro na solicitação");
+            else Console.WriteLine("Solicitação efetuada com sucesso!!!");
+        }
+
         public static string Localizar()
         {
             Console.Clear();
@@ -114,6 +135,7 @@ namespace PAeroporto
             Utils.Pause();
             return cpf;
         }
+
         public static void Listar(char situacao)
         {
             string sql = $"SELECT cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao from dbo.passageiro WHERE situacao = '{situacao}'";

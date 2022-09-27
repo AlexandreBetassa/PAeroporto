@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using PAeroporto;
 
 namespace PAeroporto
@@ -20,82 +21,138 @@ namespace PAeroporto
         {
             UltimoVoo = DateTime.Now;
             DataCadastro = DateTime.Now;
-            SituacaoCA = 'A'; //A Ativo ou I Inativo
+            SituacaoCA = 'A';
         }
 
-        public void CadCompAerea(string cnpj)
+        public void CadastrarCompainhaAerea()
         {
+            Db_Aeroporto db = new Db_Aeroporto();
             Console.Clear();
             Console.WriteLine("### CADASTRO DE COMPANHIA AEREA ###");
-            CNPJ = cnpj;
-            //Razão Social
             do
             {
-                Console.Write("Informe o nome da Razão Social (máximo 50 dígitos):  ");
-                RazaoSocial = Console.ReadLine();
-                if (RazaoSocial.Length > 50 || String.IsNullOrWhiteSpace(RazaoSocial))
-                {
-                    Console.WriteLine("\nInforme um nome válido.\nTENTE NOVAMENTE!");
-                    Utils.Pause();
-                }
-            } while (RazaoSocial.Length > 50 || String.IsNullOrWhiteSpace(RazaoSocial));
+                CNPJ = Utils.ColetarString("Informe o CNPJ da empresa que deseja se efetur o cadastro: ");
+                if (!Utils.ValidarCnpj(CNPJ)) Console.WriteLine("CNPJ inválido");
+                else break;
+            } while (true);
+            if (db.VerificarDados($"SELECT cnpj FROM dbo.bloqueados WHERE cnpj = '{CNPJ}';"))
+            {
+                Console.WriteLine("O CNPJ da sua empresa se encontra em nossa lista de CNPJ bloqueados\nContate a administração\nOperação cancelada");
+                return;
+            }
+            DataAbertura = Utils.ColetarData("Informe a data de abertura da empresa: ");
+            TimeSpan result = DateTime.Now - DataAbertura;
+            if (result.Days / 30 < 6)
+            {
+                Console.WriteLine("EMPRESAS COM MENOS DE 6 MESES DE EXISTÊNCIA NÃO PODEM SER CADASTRADAS");
+                return;
+            }
+            do
+            {
+                RazaoSocial = Utils.ColetarString("Informe a razão social da empresa: ");
+                if (RazaoSocial.Length > 50) Console.WriteLine("O nome deve possuir 50 caracteres ou menos!!!");
+                else break;
+            } while (true);
 
-            //Data de abertura
-            DataAbertura = Utils.ColetarData("Informe a data de abertura: (mês/dia/ano)");
+            string sql = "INSERT INTO dbo.companhiaAerea (cnpj, razaoSocial, dataAbertura, dataCadastro, ultimoVoo, situacao)" +
+                $"VALUES ('{this.CNPJ}','{this.RazaoSocial}', '{this.DataAbertura}','{this.DataCadastro}','{this.UltimoVoo}','{this.SituacaoCA}')";
+            if (!db.InsertTable(sql)) Console.WriteLine("Erro na solicitação");
+            else Console.WriteLine("Cadastro efetuado com sucesso!!!");
         }
 
-        public void EditarCompAerea()
+        public static void Editar()
         {
-            int op;
+            string cnpj; do
+            {
+                cnpj = Utils.ColetarString("Informe o CNPJ da Empresa a ser alterado ou digite 0 para Sair: ");
+                if (cnpj == "0") return;
+                else if (!Utils.ValidarCnpj(cnpj)) Console.WriteLine("CNPJ inválido");
+                else break;
+            } while (true);
             do
             {
-                Console.Write("Escolha o dado que você deseja editar: ");
-                Console.Write("1 - Editar RAZÃO SOCIAL ");
-                Console.Write("2 - Editar DATA DE ABERTURA ");
-                Console.Write("3 - Editar ÚLTIMO VOO ");
-                Console.Write("4 - Editar NOVA DATA CADASTRO (ALTERAÇÃO) ");
-                Console.Write("0 - SAIR ");
-                op = int.Parse(Console.ReadLine());
+                Console.Clear();
+                Console.WriteLine("### EDITAR COMPANHIA AÉREA ###");
+                Console.WriteLine("(0 - Sair)\n(1 - Editar Razão Social)\n(2 - Inativar Cadastro)\n(3 - Ativar Cadastro)");
+                int op = Utils.ColetarValorInt("Informe opção: ");
 
-                if (op != 1 && op != 2 && op != 3 && op != 4 && op != 0)
+                Db_Aeroporto db = new Db_Aeroporto();
+                switch (op)
                 {
-                    Console.WriteLine("Opção inválida!");
+                    case 0:
+                        return;
+                    case 1:
+                        string razaoSocial = Utils.ColetarString("Informe a nova Razão Social: ");
+                        if (!db.UpdateTable($"UPDATE dbo.companhiaAerea set razaoSocial = '{razaoSocial}' WHERE cnpj = '{cnpj}'")) Console.WriteLine("Erro na solicitação");
+                        else Console.WriteLine("Solicitação efetuada com sucesso!!!");
+                        break;
+                    case 2:
+                        InativarCadastro(cnpj, db);
+                        break;
+                    case 3:
+                        AtivarCadastro(cnpj, db);
+                        break;
+                    default:
+                        Console.WriteLine("Opção inválida");
+                        break;
                 }
+                Utils.Pause();
+            } while (true);
+        }
 
-            } while (op != 1 && op != 2 && op != 3 && op != 4 && op != 0);
-
-            switch (op)
+        static void InativarCadastro(string cnpj, Db_Aeroporto db)
+        {
+            int confirmacao;
+            do
             {
-                case 1:
-                    Console.Write("Informe a RAZÃO SOCIAL correta: ");
-                    string razaoSocial = Console.ReadLine();
-                    RazaoSocial = razaoSocial;
-                    break;
+                confirmacao = Utils.ColetarValorInt("Confirmar inativação (1 - Sim) (2 - Não): ");
+                if (confirmacao != 2 && confirmacao != 1) Console.WriteLine("Opção inválida!!!");
+                else break;
+            } while (true);
+            if (confirmacao == 2) return;
+            else
+            {
+                if (!db.UpdateTable($"UPDATE dbo.companhiaAerea SET situacao = 'I' WHERE cnpj = '{cnpj}'")) Console.WriteLine("Erro na solicitação");
+                else Console.WriteLine("Solicitação efetuada com sucesso!!!");
+            }
+        }
 
-                case 2:
-                    Console.Write("Informe a DATA DE ABERTURA correta: ");
-                    DateTime dataAbertura = DateTime.Parse(Console.ReadLine());
-                    DataAbertura = dataAbertura;
-                    break;
+        public static void LocalizarCompanhiaAerea()
+        {
+            string cnpj;
+            do
+            {
+                cnpj = Utils.ColetarString("Informe o CNPJ para busca: ");
+                if (!Utils.ValidarCnpj(cnpj)) Console.WriteLine("CNPJ Inválido!!!");
+                else break;
+            } while (true);
+            Db_Aeroporto db = new Db_Aeroporto();
+            string sql = $"SELECT cnpj, razaoSocial, dataAbertura, dataCadastro, ultimoVoo,situacao FROM dbo.companhiaAerea WHERE cnpj = '{cnpj}'";
+            db.SelectTableCA(sql);
+        }
 
-                case 3:
-                    Console.Write("Informe a DATA DO ÚLTIMO VOO correta: ");
-                    DateTime ultimoVoo = DateTime.Parse(Console.ReadLine());
-                    UltimoVoo = ultimoVoo;
-                    break;
+        public static void ListarCompanhias(char situacao)
+        {
 
-                case 4:
-                    do
-                    {
-                        Console.WriteLine("Informe a SITUAÇÃO do cadastro correta (A - Ativo, I - Inativo): ");
-                        char situacao = char.Parse(Console.ReadLine());
-                        SituacaoCA = situacao;
+            Db_Aeroporto db = new Db_Aeroporto();
+            string sql = $"SELECT cnpj, razaoSocial,dataAbertura, dataCadastro,ultimoVoo,situacao FROM dbo.companhiaAerea WHERE situacao = '{situacao}';";
+            db.SelectTableCA(sql);
+        }
 
-                    } while (SituacaoCA != 'A' && SituacaoCA != 'I');
-                    break;
-
-                case 0:
-                    break;
+        public static void AtivarCadastro(string cnpj, Db_Aeroporto db)
+        {
+            int confirmacao;
+            do
+            {
+                confirmacao = Utils.ColetarValorInt("Confirmar Ativação (1 - Sim) (2 - Não): ");
+                if (confirmacao != 2 && confirmacao != 1) Console.WriteLine("Opção inválida!!!");
+                else break;
+            } while (true);
+            if (confirmacao == 2) return;
+            else
+            {
+                if (!db.UpdateTable($"UPDATE dbo.companhiaAerea SET situacao = 'A' WHERE cnpj = '{cnpj}'")) Console.WriteLine("Erro na solicitação");
+                else Console.WriteLine("Solicitação efetuada com sucesso!!!");
             }
         }
 

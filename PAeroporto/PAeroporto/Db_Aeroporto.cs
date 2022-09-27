@@ -69,7 +69,6 @@ namespace PAeroporto
                         Console.WriteLine();
                     }
                 }
-
             }
             catch (SqlException msg)
             {
@@ -77,6 +76,42 @@ namespace PAeroporto
             }
             conn.Close();
             return true;
+        }
+
+        public bool SelectTableCA(string sql)
+        {
+            bool aux = false;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows)
+                {
+                    Console.WriteLine("CNPJ não encontrado!!!");
+                    conn.Close();
+                }
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Razão Social: {r.GetString(1)}");
+                        Console.WriteLine($"CNPJ: {r.GetString(0)}");
+                        Console.WriteLine($"Data de abertura: {r.GetDateTime(2).ToShortDateString()}");
+                        Console.WriteLine($"Data de cadastro no sistema: {r.GetDateTime(3).ToShortDateString()}");
+                        Console.WriteLine($"Ultima Voo: {r.GetDateTime(4).ToShortDateString()}");
+                        Console.WriteLine($"Status (A - Ativo) (I - Inativo): {r.GetString(5)}");
+                        Console.WriteLine();
+                    }
+                    aux = true;
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine(msg.Number);
+            }
+            conn.Close();
+            return aux;
         }
 
         public bool VerificarDados(string sql)
@@ -87,6 +122,7 @@ namespace PAeroporto
             SqlDataReader r = cmd.ExecuteReader();
             if (!r.HasRows) aux = false;
             else aux = true;
+            conn.Close();
             return aux;
         }
 
@@ -115,7 +151,6 @@ namespace PAeroporto
             }
             return true;
         }
-
         public bool SelectRestritos(string sql)
         {
             bool aux = false;
@@ -140,5 +175,30 @@ namespace PAeroporto
             }
             return aux;
         }
+        public bool SelectBloqueados(string sql)
+        {
+            bool aux = false;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows) aux = false;
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"CNPJ bloqueado número: {r.GetString(0)}\n");
+                        aux = true;
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            return aux;
+        }
+
     }
 }
