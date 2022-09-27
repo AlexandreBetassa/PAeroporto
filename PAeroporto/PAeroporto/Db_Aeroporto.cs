@@ -11,7 +11,7 @@ namespace PAeroporto
     internal class Db_Aeroporto
     {
         string conexao = "Data Source = DESKTOP-49RHHLK\\MSSQL;TrustServerCertificate=True;Initial Catalog=aeroporto;User ID=sa;Password=834500";
-        SqlConnection conn = new SqlConnection();
+        SqlConnection conn;
 
         public Db_Aeroporto()
         {
@@ -19,14 +19,17 @@ namespace PAeroporto
         }
 
         //metodo insert para insercao no banco de dados
-        public void InsertTable(string sql)
+        public bool InsertTable(string sql)
         {
+            bool aux = false;
             int row;
             try
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 row = cmd.ExecuteNonQuery();
+                if (row != 0) aux = true;
+                else aux = false;
             }
             catch (SqlException msg)
             {
@@ -36,6 +39,7 @@ namespace PAeroporto
                 Utils.Pause();
             }
             conn.Close();
+            return aux;
         }
 
         public bool SelectTable(string sql)
@@ -112,6 +116,29 @@ namespace PAeroporto
             return true;
         }
 
-
+        public bool SelectRestritos(string sql)
+        {
+            bool aux = false;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows) aux = false;
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"CPF restrito número: {r.GetString(0)}\n");
+                        aux = true;
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            return aux;
+        }
     }
 }
