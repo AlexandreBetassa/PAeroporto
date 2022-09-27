@@ -133,7 +133,6 @@ namespace PAeroporto
 
         public static void ListarCompanhias(char situacao)
         {
-
             Db_Aeroporto db = new Db_Aeroporto();
             string sql = $"SELECT cnpj, razaoSocial,dataAbertura, dataCadastro,ultimoVoo,situacao FROM dbo.companhiaAerea WHERE situacao = '{situacao}';";
             db.SelectTableCA(sql);

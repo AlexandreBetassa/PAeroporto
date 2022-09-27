@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Net.WebSockets;
 using System.Text;
@@ -28,10 +29,10 @@ namespace PAeroporto
                         Console.Clear();
                         MenuCompanhia();
                         break;
-                    //case 3:
-                    //    Console.Clear();
-                    //    MenuAeronave(listaAeronaves, ListaCompanhiaAereas);
-                    //    break;
+                    case 3:
+                        Console.Clear();
+                        MenuAeronave();
+                        break;
                     //case 4:
                     //    Console.Clear();
                     //    MenuVoo(listaVoos, listaIatas, listaAeronaves);
@@ -60,6 +61,7 @@ namespace PAeroporto
                 }
             } while (true);
         }
+
 
 
         #region Menus
@@ -194,6 +196,52 @@ namespace PAeroporto
                         if (!db.SelectBloqueados("SELECT cnpj FROM dbo.bloqueados")) Console.WriteLine("Não há CNPJs inscritos nessa lista");
                         break;
                     case 0:
+                        return;
+                    default:
+                        Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
+                        break;
+                }
+                Utils.Pause();
+            } while (true);
+        }
+
+        public static void MenuAeronave()
+        {
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("### MENU AERONAVE ###");
+                Console.WriteLine("1 - Cadastrar Aeronaves");
+                Console.WriteLine("2 - Listar Aeronaves");
+                Console.WriteLine("3 - Editar Aeronave");
+                Console.WriteLine("4 - Listar Aeronaves");
+                Console.WriteLine("0 - Sair do Menu de Aeronaves");
+                Console.Write("Opção: ");
+                int opc = int.Parse(Console.ReadLine());
+
+                switch (opc)
+                {
+                    case 1:
+                        Aeronave aeronave = new Aeronave();
+                        aeronave.CadastroAeronave();
+                        break;
+                    case 2:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
+                        Aeronave.Listar();
+                        break;
+                    case 3:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
+                        Aeronave.EditarAeronave();
+                        break;
+                    case 4:
+                    //    foreach (Aeronave item in listaAeronaves)
+                    //        if (item.Situacao == 'A')
+                    //            Console.WriteLine(item.ToString() + "\n");
+                    //    break;
+                    case 0:
+                        Console.WriteLine("Você saiu do Menu de Aeronaves!");
                         return;
                     default:
                         Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,7 +42,6 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-
         public bool SelectTable(string sql)
         {
             try
@@ -77,7 +77,6 @@ namespace PAeroporto
             conn.Close();
             return true;
         }
-
         public bool SelectTableCA(string sql)
         {
             bool aux = false;
@@ -113,7 +112,36 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-
+        public bool SelectAeronave(string sql)
+        {
+            bool aux = false;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows) aux = false;
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Inscrição da aeronave: {r.GetString(0)}");
+                        Console.WriteLine($"Nome Companhia aérea: {r.GetString(1)}");
+                        Console.WriteLine($"Capacidade da aeronave: {r.GetInt32(2)}");
+                        Console.WriteLine($"Data de última venda de passagem: {r.GetDateTime(3)}");
+                        Console.WriteLine($"Data de cadastro no sistema: {r.GetDateTime(4)}");
+                        Console.WriteLine($"Situação da aeronave: {r.GetString(5)}");
+                        Console.WriteLine();
+                        aux = true;
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            return aux;
+        }
         public bool VerificarDados(string sql)
         {
             bool aux;
@@ -123,14 +151,6 @@ namespace PAeroporto
             if (!r.HasRows) aux = false;
             else aux = true;
             conn.Close();
-            return aux;
-        }
-
-        public bool VerificarDados(SqlDataReader r)
-        {
-            bool aux;
-            if (!r.HasRows) aux = false;
-            else aux = true;
             return aux;
         }
         public bool UpdateTable(string sql)
@@ -198,6 +218,23 @@ namespace PAeroporto
                 Console.WriteLine($"Erro código {msg.Number}");
             }
             return aux;
+        }
+        public string getDadoTable(string sql)
+        {
+            string texto = "";
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.Read()) texto = r.GetString(0);
+
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            return texto;
         }
 
     }
