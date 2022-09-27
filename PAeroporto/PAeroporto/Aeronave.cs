@@ -122,8 +122,6 @@ namespace PAeroporto
             if (!db.InsertTable(sql)) Console.WriteLine("Houve um erro na solicitação");
             else Console.WriteLine("Solicitação efetuada com sucesso");
         }
-
-
         public void EditarAeronave()
         {
             Console.WriteLine("Escolha entre as opções, o/os dados que deseja editar em seu cadastro: ");
@@ -156,6 +154,14 @@ namespace PAeroporto
                     Utils.Pause();
                     break;
             }
+        }
+
+        public static void Listar()
+        {
+            Db_Aeroporto db = new Db_Aeroporto();
+            string sql = $"SELECT aeronave.inscAeronave, companhiaAerea.razaoSocial, aeronave.capacidade, aeronave.ultimaVenda, aeronave.dataCadastro, aeronave.situacao" +
+                $" FROM dbo.aeronave, dbo.companhiaAerea WHERE aeronave.cnpjCompAerea = companhiaAerea.cnpj";
+            db.SelectAeronave(sql);
         }
 
     }

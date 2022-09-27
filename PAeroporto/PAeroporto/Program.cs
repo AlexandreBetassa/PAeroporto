@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Net.WebSockets;
 using System.Text;
@@ -60,6 +61,7 @@ namespace PAeroporto
                 }
             } while (true);
         }
+
 
 
         #region Menus
@@ -223,26 +225,27 @@ namespace PAeroporto
                         Aeronave aeronave = new Aeronave();
                         aeronave.CadastroAeronave();
                         break;
-                        //case 2:
-                        //    Console.Write("Informe a Inscrição da Aeronave para busca: ");
-                        //    string inscricao = Console.ReadLine();
-                        //    Console.WriteLine(BuscarAeronave(listaAeronaves, inscricao).ToString());
-                        //    break;
-                        //case 3:
-                        //    EditarAeronave(listaAeronaves);
-                        //    break;
-                        //case 4:
-                        //    foreach (Aeronave item in listaAeronaves)
-                        //        if (item.Situacao == 'A')
-                        //            Console.WriteLine(item.ToString() + "\n");
-                        //    break;
-                        //case 0:
-                        //    Console.WriteLine("Você saiu do Menu de Aeronaves!");
+                    case 2:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
+                        Aeronave.Listar();
+                        break;
+                    //case 3:
+                    //    EditarAeronave(listaAeronaves);
+                    //    break;
+                    //case 4:
+                    //    foreach (Aeronave item in listaAeronaves)
+                    //        if (item.Situacao == 'A')
+                    //            Console.WriteLine(item.ToString() + "\n");
+                    //    break;
+                    case 0:
+                        Console.WriteLine("Você saiu do Menu de Aeronaves!");
                         return;
                     default:
                         Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
                         break;
                 }
+                Utils.Pause();
             } while (true);
         }
 
