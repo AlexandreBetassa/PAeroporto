@@ -25,7 +25,7 @@ namespace PAeroporto
         }
         public void CadastrarPassageiro()
         {
-            Db_Aeroporto db = new Db_Aeroporto();
+
             Console.WriteLine(">>>CADASTRO DE PASSAGEIRO<<<");
 
             do
@@ -47,61 +47,78 @@ namespace PAeroporto
             DataNascimento = Utils.ColetarData("Informe sua Data de Nascimento: ");
             Sexo = Utils.ColetarValorChar("Informe seu genero: (M - Masculino, F - Feminino, N - Não desejo informar): ");
 
+            Db_Aeroporto db = new Db_Aeroporto();
             string sql = "INSERT INTO dbo.passageiro (cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao)" +
                 $"VALUES ('{this.CPF}','{this.Nome}','{this.DataNascimento}','{this.Sexo}','{this.UltimaCompra}','{this.DataCadastro}','{this.Situacao}')";
             db.InsertTable(sql);
 
         }
-
-
-        public void EditarPassageiro()
+        public static void Editar()
         {
+            string cpf = Utils.ColetarString("Informe CPF: ");
+            Db_Aeroporto db = new Db_Aeroporto();
+            string sql = $"SELECT cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao from dbo.passageiro where cpf = '{cpf}'";
+            if (!db.SelectTable(sql)) return;
             Console.WriteLine("Escolha entre as opções, o/os dados que deseja editar em seu cadastro: ");
             Console.WriteLine("1 - Editar NOME cadastrado");
-            Console.WriteLine("2 - Editar DATA DE NASCIMENTO cadastrado");
-            Console.WriteLine("3 - Editar SEXO cadastrado");
-            Console.WriteLine("4 - Editar DATA DO CADASTRO");
-            Console.WriteLine("5 - Editar SITUAÇÃO do CADASTRO ");
-            int op = int.Parse(Console.ReadLine());
+            Console.WriteLine("2 - Editar SEXO cadastrado");
+            Console.WriteLine("3 - Inativar CADASTRO");
+            int op = Utils.ColetarValorInt("Informe opção que deseja editar: ");
             switch (op)
             {
                 case 1:
-                    Console.WriteLine("Informe o NOME correto: ");
-                    Nome = Console.ReadLine();
+                    string nome = Utils.ColetarString("Informe o novo nome: ");
+                    sql = $"UPDATE dbo.passageiro SET nome = '{nome}' WHERE cpf = {cpf}";
+                    if (!db.UpdateTable(sql)) Console.WriteLine("Erro na solicitação");
+                    else Console.WriteLine("Solicitação efetuada com sucesso!!!");
                     break;
-
                 case 2:
-                    Console.WriteLine("Informe a DATA DE NASCIMENTO correta: ");
-                    DataNascimento = DateTime.Parse(Console.ReadLine());
-
+                    char sexo = Utils.ColetarValorChar("Informe o gênero correto (M- Masculino, F - Feminino, N - Não desejo informar): ");
+                    sql = $"UPDATE dbo.passageiro SET sexo = '{sexo}' WHERE cpf = {cpf}";
+                    if (!db.UpdateTable(sql)) Console.WriteLine("Erro na solicitação");
+                    else Console.WriteLine("Solicitação efetuada com sucesso!!!");
                     break;
-
                 case 3:
-                    Sexo = Utils.ColetarValorChar("Informe o gênero correto (M- Masculino, F - Feminino, N - Não desejo informar): ");
+                    InativarCadastro(db, cpf);
                     break;
-
-                case 4:
-                    Console.WriteLine("Informe a DATA DO CADASTRO correta: ");
-                    DataCadastro = DateTime.Parse(Console.ReadLine());
-                    break;
-                case 5:
-                    do
-                    {
-                        Console.WriteLine("Informe a SITUAÇÃO do cadastro correta (Ativo, Inativo): ");
-                        Situacao = char.Parse(Console.ReadLine());
-
-                    } while (Situacao != 'A' && Situacao != 'I');
-                    break;
-
                 default:
+                    Console.WriteLine("Operação inválida");
                     break;
             }
+            Utils.Pause();
+        }
+
+        public static void InativarCadastro(Db_Aeroporto db, string cpf)
+        {
+            int confirmar;
+            do
+            {
+                confirmar = Utils.ColetarValorInt("Confirmar inativação do passageiro\n(1 - Sim)\n(2 - Não)\nInforme Opção: ");
+                if (confirmar != 1 && confirmar != 2) Console.WriteLine("Opção inválida");
+                else break;
+            } while (confirmar != 1 && confirmar != 2);
+            if (confirmar == 2) return;
+            string sql = $"UPDATE dbo.passageiro set situacao = 'I' WHERE cpf = {cpf}";
+            if (!db.UpdateTable(sql)) Console.WriteLine("Erro na solicitação");
+            else Console.WriteLine("Solicitação efetuada com sucesso!!!");
+        }
+        public static string Localizar()
+        {
+            Console.Clear();
+            string cpf;
+            Console.WriteLine("### LOCALIZAR PASSAGEIRO ###");
+            do cpf = Utils.ColetarString("Informe o CPF do Passageiro para busca: ");
+            while (!Utils.ValidarCpf(cpf));
+            string sql = $"SELECT cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao from dbo.passageiro where cpf = '{cpf}'";
+            Db_Aeroporto db = new Db_Aeroporto();
+            db.SelectTable(sql);
+            Utils.Pause();
+            return cpf;
         }
         public override string ToString()
         {
             return ($"CPF: {CPF}\nNOME: {Nome}\nDATA DE NASCIMENTO: {DataNascimento}\nSEXO: {Sexo}\nÚLTIMA COMPRA: {UltimaCompra}\nDATA EM QUE O CADASTRO FOI REALIZADO: {DataCadastro}\nSITUAÇÃO DO CADASTRO (A - ATIVO, I - INATIVO): {Situacao}").ToString();
         }
-
     }
 }
 

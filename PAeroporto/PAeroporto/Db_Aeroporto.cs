@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using Microsoft.Win32.SafeHandles;
 
 namespace PAeroporto
 {
     internal class Db_Aeroporto
     {
-        string conexao = "Data Source = localhost\\MSSQL;Initial Catalog=aeroporto;Persist Security Info=True;User ID=sa;Password=834500";
+        string conexao = "Data Source = DESKTOP-49RHHLK\\MSSQL;TrustServerCertificate=True;Initial Catalog=aeroporto;User ID=sa;Password=834500";
         SqlConnection conn = new SqlConnection();
 
         public Db_Aeroporto()
@@ -36,6 +37,81 @@ namespace PAeroporto
             }
             conn.Close();
         }
+
+        public bool SelectTable(string sql)
+        {
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows)
+                {
+                    Console.WriteLine("CPF não encontrado!!!");
+                    conn.Close();
+                    return false;
+                }
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Nome: {r.GetString(1)}");
+                        Console.WriteLine($"CPF: {r.GetString(0)}");
+                        Console.WriteLine($"Data de nascimento: {r.GetDateTime(2).ToShortDateString()}");
+                        Console.WriteLine($"Sexo: {r.GetString(3)}");
+                        Console.WriteLine($"Ultima compra: {r.GetDateTime(4).ToShortDateString()}");
+                        Console.WriteLine($"Ultima data de cadastramento: {r.GetDateTime(5).ToShortDateString()}");
+                        Console.WriteLine($"Status (A - Ativo) (I - Inativo): {r.GetString(6)}");
+                        Console.WriteLine();
+                    }
+                }
+
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine(msg.Number);
+            }
+            conn.Close();
+            return true;
+        }
+
+        public bool VerificarDados(string sql)
+        {
+            bool aux;
+            conn.Open();
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            SqlDataReader r = cmd.ExecuteReader();
+            if (!r.HasRows) aux = false;
+            else aux = true;
+            return aux;
+        }
+
+        public bool VerificarDados(SqlDataReader r)
+        {
+            bool aux;
+            if (!r.HasRows) aux = false;
+            else aux = true;
+            return aux;
+        }
+        public bool UpdateTable(string sql)
+        {
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                if (cmd.ExecuteNonQuery() == 0)
+                {
+                    conn.Close();
+                    return false;
+                }
+            }
+            catch
+            {
+
+            }
+            return true;
+        }
+
 
     }
 }

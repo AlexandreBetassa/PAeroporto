@@ -1,6 +1,6 @@
 create database aeroporto;
 
-drop database aeroporto;
+
 
 create table passageiro(
 cpf varchar(11) constraint pk_passageiro primary key not null,
