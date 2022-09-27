@@ -87,7 +87,6 @@ namespace PAeroporto
             }
             Utils.Pause();
         }
-
         public static void InativarCadastro(Db_Aeroporto db, string cpf)
         {
             int confirmar;
@@ -115,6 +114,14 @@ namespace PAeroporto
             Utils.Pause();
             return cpf;
         }
+        public static void Listar(char situacao)
+        {
+            string sql = $"SELECT cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao from dbo.passageiro WHERE situacao = '{situacao}'";
+            Db_Aeroporto db = new Db_Aeroporto();
+            db.SelectTable(sql);
+            Utils.Pause();
+        }
+
         public override string ToString()
         {
             return ($"CPF: {CPF}\nNOME: {Nome}\nDATA DE NASCIMENTO: {DataNascimento}\nSEXO: {Sexo}\nÚLTIMA COMPRA: {UltimaCompra}\nDATA EM QUE O CADASTRO FOI REALIZADO: {DataCadastro}\nSITUAÇÃO DO CADASTRO (A - ATIVO, I - INATIVO): {Situacao}").ToString();

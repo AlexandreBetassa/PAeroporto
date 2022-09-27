@@ -81,7 +81,8 @@ namespace PAeroporto
             {
                 Console.Clear();
                 Console.WriteLine("### AREA DO PASSAGEIRO ###");
-                int op = Utils.ColetarValorInt("(0 - Retornar ao menu anterior)\n(1 - Cadastrar novo passageiro)\n(2 - Localizar Passageiro)\nInforme opção desejada: ");
+                int op = Utils.ColetarValorInt("(0 - Retornar ao menu anterior)\n(1 - Cadastrar novo passageiro)\n(2 - Localizar Passageiro)\n" +
+                    $"(3 - Editar PAssageiro)\n(4 - Listar Passageiros Ativos)\n(5 - Listar Passageiros Inativos)\nInforme opção desejada: ");
                 switch (op)
                 {
                     case 0:
@@ -95,10 +96,18 @@ namespace PAeroporto
                         Passageiro.Localizar();
                         break;
                     case 3:
-
                         Passageiro.Editar();
                         break;
-
+                    case 4:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR PASSAGEIROS ATIVOS ###\n");
+                        Passageiro.Listar('A');
+                        break;
+                    case 5:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR PASSAGEIROS INATIVOS ###\n");
+                        Passageiro.Listar('I');
+                        break;
                     default:
                         Console.WriteLine("Opção inválida...");
                         Utils.Pause();
