@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,7 +106,84 @@ namespace PAeroporto
             } while (true);
 
             //Lista de Companhias
-            Console.Clear();
+            CNPJCompAerea = ColetarCompanhia();
+
+            string sql = $"INSERT INTO dbo.aeronave (inscAeronave, cnpjCompAerea, capacidade, ultimaVenda, situacao, dataCadastro) " +
+                $"VALUES ('{this.Inscricao}','{this.CNPJCompAerea}','{this.Capacidade}','{this.UltimaVenda}','{this.Situacao}','{this.DataCadastro}');";
+            if (!db.InsertTable(sql)) Console.WriteLine("Houve um erro na solicitação");
+            else Console.WriteLine("Solicitação efetuada com sucesso");
+        }
+        public static void EditarAeronave()
+        {
+            string aeronave;
+            Db_Aeroporto db = new Db_Aeroporto();
+            do
+            {
+                aeronave = Utils.ColetarString("Informe a inscrição da aeronave ou 0 - Para retornar ao menu anterior: ");
+                if (aeronave == "0") return;
+                else if (!db.SelectAeronave($"SELECT inscAeronave FROM dbo.aeronave WHERE inscAeronave = '{aeronave}'")) Console.WriteLine("Aeronave não localizada");
+                else break;
+            } while (true);
+            do
+            {
+                Console.WriteLine("0 - Retornar ao menu anterior");
+                Console.WriteLine("1 - Alterar capacidade");
+                Console.WriteLine("2 - Inativar cadastro");
+                Console.WriteLine("3 - Ativar cadastro");
+                int op = Utils.ColetarValorInt("Informe a operação: ");
+                switch (op)
+                {
+                    case 0:
+                        return;
+                    case 1:
+                        int capacidade = Utils.ColetarValorInt("Informe a capacidade correta da aeronave: ");
+                        if (!db.UpdateTable($"UPDATE dbo.Aeronave SET capacidade = {capacidade} WHERE inscAeronave='{aeronave}'")) Console.WriteLine("Ocorreu um erro na solicitação");
+                        else Console.WriteLine("Solicitação efetuada com sucesso");
+                        break;
+                    case 2:
+                        InativarCadastro(aeronave, db);
+                        break;
+                    case 3:
+                        AtivarCadastro(aeronave, db);
+                        break;
+                    default:
+                        Console.WriteLine("Opção inválida...");
+                        Utils.Pause();
+                        break;
+                }
+            } while (true);
+        }
+        public static void InativarCadastro(String aeronave, Db_Aeroporto db)
+        {
+            int confirmar;
+            do
+            {
+                confirmar = Utils.ColetarValorInt("Confirmar inativação do cadastro (1 - Sim) (2 - Não): ");
+                if (confirmar == 2) return;
+                else if (confirmar != 1) Console.WriteLine("Opção Inválida");
+                else break;
+            } while (true);
+            if (!db.UpdateTable($"UPDATE dbo.aeronave SET situacao = 'I' WHERE inscAeronave = {aeronave}")) Console.WriteLine("Houve um erro na solicitação");
+            else Console.WriteLine("Solicitação efetuada com sucesso!!!");
+        }
+
+        public static void AtivarCadastro(String aeronave, Db_Aeroporto db)
+        {
+            int confirmar;
+            do
+            {
+                confirmar = Utils.ColetarValorInt("Confirmar Ativação do cadastro (1 - Sim) (2 - Não): ");
+                if (confirmar == 2) return;
+                else if (confirmar != 1) Console.WriteLine("Opção Inválida");
+                else break;
+            } while (true);
+            if (!db.UpdateTable($"UPDATE dbo.aeronave SET situacao = 'A' WHERE inscAeronave = {aeronave}")) Console.WriteLine("Houve um erro na solicitação");
+            else Console.WriteLine("Solicitação efetuada com sucesso!!!");
+        }
+        public static String ColetarCompanhia()
+        {
+            string cnpj;
+            Db_Aeroporto db = new Db_Aeroporto();
             Console.WriteLine("### LISTA DE COMPANHIAS CADASTRADAS E ATIVAS ###");
             db.SelectTableCA($"SELECT cnpj, razaoSocial,dataAbertura, dataCadastro,ultimoVoo,situacao FROM dbo.companhiaAerea WHERE situacao = 'A';");
             do
@@ -115,47 +193,8 @@ namespace PAeroporto
                 else if (!db.VerificarDados($"SELECT cnpj FROM dbo.companhiaAerea WHERE cnpj = '{cnpj}'")) Console.WriteLine("Informe um CNPJ da lista acima ou verifique o cadastro da Companhia Aérea");
                 else break;
             } while (true);
-            CNPJCompAerea = cnpj;
-
-            string sql = $"INSERT INTO dbo.aeronave (inscAeronave, cnpjCompAerea, capacidade, ultimaVenda, situacao, dataCadastro) " +
-                $"VALUES ('{this.Inscricao}','{this.CNPJCompAerea}','{this.Capacidade}','{this.UltimaVenda}','{this.Situacao}','{this.DataCadastro}');";
-            if (!db.InsertTable(sql)) Console.WriteLine("Houve um erro na solicitação");
-            else Console.WriteLine("Solicitação efetuada com sucesso");
+            return cnpj;
         }
-        public void EditarAeronave()
-        {
-            Console.WriteLine("Escolha entre as opções, o/os dados que deseja editar em seu cadastro: ");
-            Console.WriteLine("1 - Editar CAPACIDADE cadastrada");
-            Console.WriteLine("2 - Editar ASSENTOS OCUPADOS cadastrado");
-            Console.WriteLine("3 - Editar ÚLTIMA VENDA cadastrada");
-            Console.WriteLine("4 - Editar DATA DO CADASTRO cadastrada");
-            Console.WriteLine("5 - Editar SITUAÇÃO DO CADASTRO");
-            int op = Utils.ColetarValorInt("Informe a operação: ");
-            switch (op)
-            {
-                case 1:
-                    Capacidade = Utils.ColetarValorInt("Informe a CAPACIDADE correta da aeronave: ");
-                    break;
-                case 2:
-                    AssentosOcupados = Utils.ColetarValorInt("Informe a quantidade de ASSENTOS OCUPADOS correta: ");
-                    break;
-                case 3:
-                    UltimaVenda = Utils.ColetarData("Informe a DATA correta da ÚLTIMA VENDA: ");
-                    break;
-                case 4:
-                    DataCadastro = Utils.ColetarData("Informe a DATA DO CADASTRO correta: ");
-                    break;
-                case 5:
-                    do Situacao = Utils.ColetarValorChar("Informe a SITUAÇÃO do cadastro correta (A - Ativo, I - Inativo): ");
-                    while (Situacao != 'A' && Situacao != 'I');
-                    break;
-                default:
-                    Console.WriteLine("Opção inválida...");
-                    Utils.Pause();
-                    break;
-            }
-        }
-
         public static void Listar()
         {
             Db_Aeroporto db = new Db_Aeroporto();

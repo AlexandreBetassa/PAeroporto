@@ -153,13 +153,6 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-        public bool VerificarDados(SqlDataReader r)
-        {
-            bool aux;
-            if (!r.HasRows) aux = false;
-            else aux = true;
-            return aux;
-        }
         public bool UpdateTable(string sql)
         {
             try

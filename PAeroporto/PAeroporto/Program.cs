@@ -211,8 +211,8 @@ namespace PAeroporto
             {
                 Console.Clear();
                 Console.WriteLine("### MENU AERONAVE ###");
-                Console.WriteLine("1 - Cadastrar Aeronave");
-                Console.WriteLine("2 - Buscar Aeronave");
+                Console.WriteLine("1 - Cadastrar Aeronaves");
+                Console.WriteLine("2 - Listar Aeronaves");
                 Console.WriteLine("3 - Editar Aeronave");
                 Console.WriteLine("4 - Listar Aeronaves");
                 Console.WriteLine("0 - Sair do Menu de Aeronaves");
@@ -230,10 +230,12 @@ namespace PAeroporto
                         Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
                         Aeronave.Listar();
                         break;
-                    //case 3:
-                    //    EditarAeronave(listaAeronaves);
-                    //    break;
-                    //case 4:
+                    case 3:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
+                        Aeronave.EditarAeronave();
+                        break;
+                    case 4:
                     //    foreach (Aeronave item in listaAeronaves)
                     //        if (item.Situacao == 'A')
                     //            Console.WriteLine(item.ToString() + "\n");
