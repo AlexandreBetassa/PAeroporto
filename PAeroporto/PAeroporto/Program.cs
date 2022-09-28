@@ -251,6 +251,8 @@ namespace PAeroporto
         {
             do
             {
+                Console.Clear();
+                Console.WriteLine("### VOOS ###");
                 Console.WriteLine("1 - Cadastrar Voo");
                 Console.WriteLine("2 - Buscar Voo");
                 Console.WriteLine("3 - Editar Voo");
@@ -261,17 +263,23 @@ namespace PAeroporto
                 switch (opc)
                 {
                     case 1:
+                        Console.Clear();
+                        Console.WriteLine("### CADASTRAR NOVO VOO ###");
                         Voo voo = new Voo();
                         voo.CadastrarVoo();
                         break;
                     case 2:
-                        Console.Write("Informe o ID do Voo para busca: ");
-                        string idVoo = Console.ReadLine();
-                        Console.WriteLine(BuscarVoo(listaVoos, idVoo).ToString());
+                        Console.Clear();
+                        Console.WriteLine("### CONSULTAR VOO ###");
+                        string numeroVoo = Utils.ColetarString("Informe a identificação do voo EX: (V0000): ").PadRight(5, '0');
+                        int idVoo = int.Parse(numeroVoo.Substring(1, 4));
+                        Voo.Buscar(idVoo);
                         break;
-                    //case 3:
-                    //    EditarVoo(listaVoos);
-                    //    break;
+                    case 3:
+                        Console.Clear();
+                        Console.WriteLine("### EDITAR VOO ###");
+                        Voo.EditarVoo();
+                        break;
                     //case 4:
                     //    foreach (Voo item in listaVoos)
                     //        Console.WriteLine(item.ToString() + "\n");

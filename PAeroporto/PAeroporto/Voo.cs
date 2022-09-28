@@ -54,9 +54,16 @@ namespace PAeroporto
             else Console.WriteLine("Solicitação efetuada com sucesso!!");
         }
 
+        public static void Buscar(int idVoo)
+        {
+            Db_Aeroporto db = new Db_Aeroporto();
+            string sql = $"SELECT voo.IdVoo, voo.assentosOcupado, iatas.nomeAeroporto, aeronave.inscAeronave, companhiaAerea.razaoSocial, voo.dataVoo, voo.dataCadastro, voo.situacao " +
+                $"FROM dbo.voo, dbo.aeronave,dbo.companhiaAerea ,dbo.iatas WHERE idVoo = {idVoo} AND iatas.sigla = voo.destino AND companhiaAerea.cnpj = aeronave.cnpjCompAerea AND " +
+                $"aeronave.inscAeronave = voo.aeronave ";
+            if (!db.SelectVoo(sql)) Console.WriteLine("Voo não localizado!!! Verifique se informou corretamente a identificação do voo");
+        }
 
-
-        public void EditarVoo()
+        public static void EditarVoo()
         {
             Voo voo = new();
 
