@@ -53,6 +53,15 @@ namespace PAeroporto
             if (!db.InsertTable(sql)) Console.WriteLine("Ocorreu um erro na solicitação");
             else Console.WriteLine("Solicitação efetuada com sucesso!!");
         }
+
+        public static void Buscar(char situacao)
+        {
+            Db_Aeroporto db = new Db_Aeroporto();
+            string sql = $"SELECT voo.IdVoo, voo.assentosOcupado, iatas.nomeAeroporto, aeronave.inscAeronave, companhiaAerea.razaoSocial, voo.dataVoo, voo.dataCadastro, voo.situacao " +
+                $"FROM dbo.voo, dbo.aeronave,dbo.companhiaAerea ,dbo.iatas WHERE voo.situacao = '{situacao}' AND iatas.sigla = voo.destino AND companhiaAerea.cnpj = aeronave.cnpjCompAerea AND " +
+                $"aeronave.inscAeronave = voo.aeronave ";
+            if (!db.SelectVoo(sql)) Console.WriteLine("Voos não localizados!!!");
+        }
         public static void Buscar(int idVoo)
         {
             Db_Aeroporto db = new Db_Aeroporto();
@@ -134,11 +143,6 @@ namespace PAeroporto
             if (!db.UpdateTable($"UPDATE dbo.voo SET situacao = 'C' WHERE idVoo = {idVoo}")) Console.WriteLine("Ocorreu um erro na solicitação");
             else Console.WriteLine("Solicitação efetuada com sucesso!!!");
         }
-
-        //public override string ToString()
-        //{
-        //    return "\nIdVoo: " + IdVoo + "\nCNPJ da Companhia Aerea: " + CompanhiaAerea.CNPJ + "\nIdAeronave: " + Aeronave.Inscricao + "\nDestino: " + Destino + "\nData do Voo: " + DataVoo.ToString("dd/MM/yyyy HH:mm") + "\nData do Cadastro: " + DataCadastro + "\nSituação: " + Situacao;
-        //}
 
     }
 }

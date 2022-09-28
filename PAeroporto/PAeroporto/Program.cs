@@ -256,7 +256,7 @@ namespace PAeroporto
                 Console.WriteLine("1 - Cadastrar Voo");
                 Console.WriteLine("2 - Buscar Voo");
                 Console.WriteLine("3 - Editar Voo");
-                Console.WriteLine("4 - Listar Voos");
+                Console.WriteLine("4 - Listar Voos Ativos");
                 Console.WriteLine("0 - Sair do Menu de Voos");
                 int opc = Utils.ColetarValorInt("Opção: ");
 
@@ -280,10 +280,11 @@ namespace PAeroporto
                         Console.WriteLine("### EDITAR VOO ###");
                         Voo.EditarVoo();
                         break;
-                    //case 4:
-                    //    foreach (Voo item in listaVoos)
-                    //        Console.WriteLine(item.ToString() + "\n");
-                    //    break;
+                    case 4:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR VOOS ATIVOS ###");
+                        Voo.Buscar('A');
+                        break;
                     case 0:
                         return;
                     default:

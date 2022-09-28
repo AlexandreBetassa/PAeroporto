@@ -239,7 +239,7 @@ namespace PAeroporto
                         Console.WriteLine($"Companhia Aérea: {r.GetString(4)}");
                         Console.WriteLine($"Data do voo: {r.GetDateTime(5)}");
                         Console.WriteLine($"Data de cadastro do voo: {r.GetDateTime(6)}");
-                        Console.WriteLine($"Situação voo: {r.GetString(7)}");
+                        Console.WriteLine($"Situação voo (A - Ativo) (C - Cancelado): {r.GetString(7)}");
                         aux = true;
                     }
                 }
