@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Net.WebSockets;
 using System.Text;
@@ -214,7 +215,7 @@ namespace PAeroporto
                 Console.WriteLine("1 - Cadastrar Aeronaves");
                 Console.WriteLine("2 - Listar Aeronaves");
                 Console.WriteLine("3 - Editar Aeronave");
-                Console.WriteLine("4 - Listar Aeronaves");
+                Console.WriteLine("4 - Consultar Aeronave");
                 Console.WriteLine("0 - Sair do Menu de Aeronaves");
                 Console.Write("Opção: ");
                 int opc = int.Parse(Console.ReadLine());
@@ -236,10 +237,11 @@ namespace PAeroporto
                         Aeronave.EditarAeronave();
                         break;
                     case 4:
-                    //    foreach (Aeronave item in listaAeronaves)
-                    //        if (item.Situacao == 'A')
-                    //            Console.WriteLine(item.ToString() + "\n");
-                    //    break;
+                        Console.Clear();
+                        Console.WriteLine("### BUSCAR AERONAVE ###");
+                        string inscricao = Utils.ColetarString("Informe a inscrição da aeronave que deseja consultar: ");
+                        Aeronave.Listar(inscricao);
+                        break;
                     case 0:
                         Console.WriteLine("Você saiu do Menu de Aeronaves!");
                         return;
