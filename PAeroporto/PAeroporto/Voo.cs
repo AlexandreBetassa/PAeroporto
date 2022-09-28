@@ -53,7 +53,6 @@ namespace PAeroporto
             if (!db.InsertTable(sql)) Console.WriteLine("Ocorreu um erro na solicitação");
             else Console.WriteLine("Solicitação efetuada com sucesso!!");
         }
-
         public static void Buscar(int idVoo)
         {
             Db_Aeroporto db = new Db_Aeroporto();
@@ -62,17 +61,78 @@ namespace PAeroporto
                 $"aeronave.inscAeronave = voo.aeronave ";
             if (!db.SelectVoo(sql)) Console.WriteLine("Voo não localizado!!! Verifique se informou corretamente a identificação do voo");
         }
-
         public static void EditarVoo()
         {
-            Voo voo = new();
+            int idVoo;
+            Db_Aeroporto db = new Db_Aeroporto();
+            do
+            {
+                string numeroVoo = Utils.ColetarString("Informe a identificação do voo EX: (V0000) ou digite 0 para Sair: ").PadRight(5, '0');
+                if (numeroVoo == "0") return;
+                if (!int.TryParse(numeroVoo.Substring(1, 4), out idVoo)) Console.WriteLine("A identificação do voo foi digitada incorretamente");
+                else if (!db.VerificarDados($"SELECT idVoo FROM dbo.voo WHERE idVoo = {idVoo}")) Console.WriteLine("Voo não localizado");
+                else break;
+            } while (true);
 
-            Console.Write("Editar SITUAÇÃO");
+            do
+            {
+                Console.WriteLine("Informe o que deseja alterar do voo\n(0 - Retornar ao menu anterior)\n(1 - Cancelar Voo)\n(2 - Trocar Aeronave)");
+                int op = Utils.ColetarValorInt("Informe opção: ");
+                switch (op)
+                {
+                    case 0:
+                        return;
+                    case 1:
+                        CancelarVoo(db, idVoo);
+                        break;
+                    case 2:
+                        TrocarAeronave(db, idVoo);
+                        break;
+                    default:
+                        Console.WriteLine("Opção inválida");
+                        break;
+                }
+            } while (true);
+        }
+        public static void TrocarAeronave(Db_Aeroporto db, int idVoo)
+        {
+            int confirmar;
+            string aeronave;
+            Console.Clear();
+            Console.WriteLine("### TROCAR DE AERONAVE ###");
+            do
+            {
+                aeronave = Utils.ColetarString("Informe a inscrição da nova aeronave para o voo ou digite 0 para cancelar: ");
+                if (aeronave == "0") return;
+                else if (!db.VerificarDados($"SELECT inscAeronave FROM dbo.aeronave WHERE situacao = 'A' AND inscAeronave = '{aeronave}'")) Console.WriteLine("Aeronave não localizada");
+                else break;
+            } while (true);
+            do
+            {
+                confirmar = Utils.ColetarValorInt("Confirmar troca\n(1 - Sim)\n(2 - Não)\nInforme opção: ");
+                if (confirmar == 2) return;
+                else if (confirmar != 1) Console.WriteLine("Opção inválida");
+                else break;
+            } while (true);
 
-            Console.Write("Infome a NOVA situação do voo:\nA - Ativo OU C - Cancelado: ");
-            char situacao = char.Parse(Console.ReadLine());
-            voo.Situacao = situacao;
+            if (!db.UpdateTable($"UPDATE dbo.voo SET aeronave = '{aeronave}' WHERE idVoo = {idVoo}")) Console.WriteLine("Ocorreu um erro na solicitação");
+            else Console.WriteLine("Solicitação efetuada com sucesso");
+        }
+        public static void CancelarVoo(Db_Aeroporto db, int idVoo)
+        {
+            Console.Clear();
+            Console.WriteLine("### CANCELAMENTO DE VOOS ###");
+            int confirmar;
+            do
+            {
+                confirmar = Utils.ColetarValorInt("(1 - Confirmar Cancelamento)\n(2 - Cancelar Operação de Cancelamento)\nInforme opção: ");
+                if (confirmar == 2) return;
+                else if (confirmar != 1) Console.WriteLine("Opção inválida!!!");
+                else break;
+            } while (true);
 
+            if (!db.UpdateTable($"UPDATE dbo.voo SET situacao = 'C' WHERE idVoo = {idVoo}")) Console.WriteLine("Ocorreu um erro na solicitação");
+            else Console.WriteLine("Solicitação efetuada com sucesso!!!");
         }
 
         //public override string ToString()

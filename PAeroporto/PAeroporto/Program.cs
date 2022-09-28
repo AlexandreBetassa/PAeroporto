@@ -272,8 +272,8 @@ namespace PAeroporto
                         Console.Clear();
                         Console.WriteLine("### CONSULTAR VOO ###");
                         string numeroVoo = Utils.ColetarString("Informe a identificação do voo EX: (V0000): ").PadRight(5, '0');
-                        int idVoo = int.Parse(numeroVoo.Substring(1, 4));
-                        Voo.Buscar(idVoo);
+                        if (!int.TryParse(numeroVoo.Substring(1, 4), out int idVoo)) Console.WriteLine("A identificação do voo foi digitada incorretamente");
+                        else Voo.Buscar(idVoo);
                         break;
                     case 3:
                         Console.Clear();
@@ -290,6 +290,7 @@ namespace PAeroporto
                         Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
                         break;
                 }
+                Utils.Pause();
             } while (true);
         }
 
