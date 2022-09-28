@@ -34,10 +34,10 @@ namespace PAeroporto
                         Console.Clear();
                         MenuAeronave();
                         break;
-                    //case 4:
-                    //    Console.Clear();
-                    //    MenuVoo(listaVoos, listaIatas, listaAeronaves);
-                    //    break;
+                    case 4:
+                        Console.Clear();
+                        MenuVoo();
+                        break;
                     //case 5:
                     //    Console.Clear();
                     //    MenuPassagem(listaPassagensVoos, listaVoos, listaPassagemVoo);
@@ -62,8 +62,6 @@ namespace PAeroporto
                 }
             } while (true);
         }
-
-
 
         #region Menus
         public static int Menu()
@@ -205,20 +203,18 @@ namespace PAeroporto
                 Utils.Pause();
             } while (true);
         }
-
         public static void MenuAeronave()
         {
             do
             {
                 Console.Clear();
                 Console.WriteLine("### MENU AERONAVE ###");
+                Console.WriteLine("0 - Sair do Menu de Aeronaves");
                 Console.WriteLine("1 - Cadastrar Aeronaves");
                 Console.WriteLine("2 - Listar Aeronaves");
                 Console.WriteLine("3 - Editar Aeronave");
                 Console.WriteLine("4 - Consultar Aeronave");
-                Console.WriteLine("0 - Sair do Menu de Aeronaves");
-                Console.Write("Opção: ");
-                int opc = int.Parse(Console.ReadLine());
+                int opc = Utils.ColetarValorInt("Informe opção: ");
 
                 switch (opc)
                 {
@@ -243,13 +239,50 @@ namespace PAeroporto
                         Aeronave.Listar(inscricao);
                         break;
                     case 0:
-                        Console.WriteLine("Você saiu do Menu de Aeronaves!");
                         return;
                     default:
                         Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
                         break;
                 }
                 Utils.Pause();
+            } while (true);
+        }
+                public static void MenuVoo()
+        {
+            do
+            {
+                Console.WriteLine("1 - Cadastrar Voo");
+                Console.WriteLine("2 - Buscar Voo");
+                Console.WriteLine("3 - Editar Voo");
+                Console.WriteLine("4 - Listar Voos");
+                Console.WriteLine("0 - Sair do Menu de Voos");
+                Console.Write("Opção: ");
+                int opc = int.Parse(Console.ReadLine());
+
+                switch (opc)
+                {
+                    case 1:
+
+                        break;
+                    //case 2:
+                    //    Console.Write("Informe o ID do Voo para busca: ");
+                    //    string idVoo = Console.ReadLine();
+                    //    Console.WriteLine(BuscarVoo(listaVoos, idVoo).ToString());
+                    //    break;
+                    //case 3:
+                    //    EditarVoo(listaVoos);
+                    //    break;
+                    //case 4:
+                    //    foreach (Voo item in listaVoos)
+                    //        Console.WriteLine(item.ToString() + "\n");
+                    //    break;
+                    //case 0:
+                    //    Console.WriteLine("Você saiu do Menu de Voos!");
+                    //    return;
+                    default:
+                        Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
+                        break;
+                }
             } while (true);
         }
 
