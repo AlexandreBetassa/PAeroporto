@@ -219,6 +219,33 @@ namespace PAeroporto
             }
             return aux;
         }
+
+        public bool SelectIatas(string sql)
+        {
+            bool aux = false;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows) aux = false;
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Destino: {r.GetString(0)}\n");
+                        Console.WriteLine($"Sigla (Iata): {r.GetString(1)}\n");
+                        aux = true;
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            conn.Close();
+            return aux;
+        }
         public string getDadoTable(string sql)
         {
             string texto = "";

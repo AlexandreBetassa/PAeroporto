@@ -247,7 +247,7 @@ namespace PAeroporto
                 Utils.Pause();
             } while (true);
         }
-                public static void MenuVoo()
+        public static void MenuVoo()
         {
             do
             {
@@ -256,19 +256,19 @@ namespace PAeroporto
                 Console.WriteLine("3 - Editar Voo");
                 Console.WriteLine("4 - Listar Voos");
                 Console.WriteLine("0 - Sair do Menu de Voos");
-                Console.Write("Opção: ");
-                int opc = int.Parse(Console.ReadLine());
+                int opc = Utils.ColetarValorInt("Opção: ");
 
                 switch (opc)
                 {
                     case 1:
-
+                        Voo voo = new Voo();
+                        voo.CadastrarVoo();
                         break;
-                    //case 2:
-                    //    Console.Write("Informe o ID do Voo para busca: ");
-                    //    string idVoo = Console.ReadLine();
-                    //    Console.WriteLine(BuscarVoo(listaVoos, idVoo).ToString());
-                    //    break;
+                    case 2:
+                        Console.Write("Informe o ID do Voo para busca: ");
+                        string idVoo = Console.ReadLine();
+                        Console.WriteLine(BuscarVoo(listaVoos, idVoo).ToString());
+                        break;
                     //case 3:
                     //    EditarVoo(listaVoos);
                     //    break;
@@ -276,9 +276,8 @@ namespace PAeroporto
                     //    foreach (Voo item in listaVoos)
                     //        Console.WriteLine(item.ToString() + "\n");
                     //    break;
-                    //case 0:
-                    //    Console.WriteLine("Você saiu do Menu de Voos!");
-                    //    return;
+                    case 0:
+                        return;
                     default:
                         Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
                         break;
