@@ -298,23 +298,17 @@ namespace PAeroporto
         {
             do
             {
-                Console.WriteLine("1 - Cadastrar Passagem");
-                Console.WriteLine("2 - Buscar Passagem");
-                Console.WriteLine("3 - Editar Passagem");
-                Console.WriteLine("4 - Listar Passagens");
                 Console.WriteLine("0 - Sair do Menu de Passagems");
+                Console.WriteLine("1 - Buscar Passagem");
+                Console.WriteLine("2 - Editar Passagem");
+                Console.WriteLine("3 - Listar Passagens");
                 int opc = Utils.ColetarValorInt("Informe opção: ");
 
                 switch (opc)
                 {
                     case 1:
-                        PassagemVoo passagem = new PassagemVoo();
-                        passagem.CadastrarPassagemVoo();
-                        break;
-                    case 2:
                         Console.Write("Informe o ID da Passagem para busca: ");
                         string idPassagem = Console.ReadLine();
-                        
                         break;
                     //case 3:
                     //    EditarPassagem(listaPassagens);

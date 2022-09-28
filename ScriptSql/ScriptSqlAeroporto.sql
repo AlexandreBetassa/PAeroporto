@@ -63,16 +63,20 @@ situacao char(1),
 
 create table passagem(
 idVoo int foreign key references voo(idVoo),
-idPassagem int identity ,
+idPassagem int,
 valor float not null,
-situacao char(1)
-
+situacao char(1),
+dataCadastro datetime,
 constraint pk_passagem primary key(idPassagem,idVoo)
 );
 
 select voo.IdVoo, voo.assentosOcupado, iatas.nomeAeroporto, aeronave.inscAeronave, companhiaAerea.razaoSocial, voo.dataVoo, voo.dataCadastro, voo.situacao
 from dbo.voo, dbo.aeronave,dbo.companhiaAerea ,dbo.iatas
 Where iatas.sigla = voo.destino and companhiaAerea.cnpj = aeronave.cnpjCompAerea and aeronave.inscAeronave = voo.aeronave
+
+delete from voo where IdVoo > 2
+
+
 
 
 

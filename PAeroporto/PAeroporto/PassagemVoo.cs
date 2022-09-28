@@ -15,24 +15,14 @@ namespace PAeroporto
         public DateTime DataUltimaOperacao { get; set; }
         public float Valor { get; set; } //maximo 9.999,99
         public char Situacao { get; set; }
-
-
         public PassagemVoo()
-        {
-            DataUltimaOperacao = DateTime.Now;
-            Situacao = 'L';
-        }
+        {}
 
-        public void CadastrarPassagemVoo()
+        public static void Buscar()
         {
-            Db_Aeroporto db = new Db_Aeroporto();
-            //int qtd = db.getIntTable($"SELECT capacidade FROM dbo.aeronave, dbo.voo WHERE aeronave.inscAeronave = voo.aeronave and voo.idVoo = {IdVoo}");
-            db.conn.Open();
-            Valor = Utils.ColetarValorFloat("Informe o valor das passagens: ");
-            SqlCommand sql_cmnd = new SqlCommand($"dbo.CadastroPassagens {this.Valor};", db.conn);
-            sql_cmnd.CommandType = CommandType.StoredProcedure;
-            sql_cmnd.ExecuteNonQuery();
-            db.conn.Close();
+            string passagem = Utils.ColetarString("Informe a identificação da passagem (ex: PA0000): ");
+            string sql = "";
+
         }
 
         public void EditarPassagemVoo()

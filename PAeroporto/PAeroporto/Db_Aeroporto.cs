@@ -162,6 +162,32 @@ namespace PAeroporto
             }
             return aux;
         }
+        public bool SelectPassagem(string sql)
+        {
+            bool aux = false;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows) aux = false;
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Destino: {r.GetString(0)}\n");
+                        Console.WriteLine($"Sigla (Iata): {r.GetString(1)}\n");
+                        aux = true;
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            conn.Close();
+            return aux;
+        }
         public bool VerificarDados(string sql)
         {
             bool aux;
@@ -296,26 +322,8 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-        public int getIntTable(string sql)
-        {
-            int valor = 0;
-            try
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                SqlDataReader r = cmd.ExecuteReader();
-                if (r.Read())
-                    Console.WriteLine(r.GetInt32(0));
-                    valor = r.GetInt32(0);
 
-            }
-            catch (SqlException msg)
-            {
-                Console.WriteLine($"Erro código {msg.Number}");
-            }
-            conn.Close();
-            return valor;
-        }
+
 
     }
 }
