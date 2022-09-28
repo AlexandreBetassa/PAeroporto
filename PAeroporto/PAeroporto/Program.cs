@@ -311,11 +311,11 @@ namespace PAeroporto
                         PassagemVoo passagem = new PassagemVoo();
                         passagem.CadastrarPassagemVoo();
                         break;
-                    //case 2:
-                    //    Console.Write("Informe o ID da Passagem para busca: ");
-                    //    string idPassagem = Console.ReadLine();
-                    //    Console.WriteLine(BuscarPassagem(listaPassagens, idPassagem).ToString());
-                    //    break;
+                    case 2:
+                        Console.Write("Informe o ID da Passagem para busca: ");
+                        string idPassagem = Console.ReadLine();
+                        
+                        break;
                     //case 3:
                     //    EditarPassagem(listaPassagens);
                     //    break;

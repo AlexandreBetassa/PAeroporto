@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using PAeroporto;
 
 namespace PAeroporto
 {
     internal class Voo
     {
-        public string IdVoo { get; set; } //V0000
         public string Destino { get; set; }
         public DateTime DataVoo { get; set; } // Data 8 dígitos + 4 dígitos da hora
         public DateTime DataCadastro { get; set; }
@@ -47,8 +48,10 @@ namespace PAeroporto
                 else break;
             } while (true);
 
+            float valor = Utils.ColetarValorFloat("Informe o valor das passagens: ");
             string sql = $"INSERT INTO dbo.voo (assentosOcupado, destino, aeronave, dataVoo, dataCadastro, situacao) " +
-                $"VALUES ('{this.AssentosOcupados}','{this.Destino}','{this.InscAeronave}','{this.DataVoo}','{this.DataCadastro}','{this.Situacao}');";
+                $"VALUES ('{this.AssentosOcupados}','{this.Destino}','{this.InscAeronave}','{this.DataVoo}','{this.DataCadastro}','{this.Situacao}'); " +
+                $"EXEC dbo.CadastroPassagens {valor};";
             if (!db.InsertTable(sql)) Console.WriteLine("Ocorreu um erro na solicitação");
             else Console.WriteLine("Solicitação efetuada com sucesso!!");
         }

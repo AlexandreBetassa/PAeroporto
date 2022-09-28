@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using PAeroporto;
 
 namespace PAeroporto
@@ -24,22 +26,12 @@ namespace PAeroporto
         public void CadastrarPassagemVoo()
         {
             Db_Aeroporto db = new Db_Aeroporto();
-            Console.WriteLine("### VOOS ATIVOS ###");
-            Voo.Buscar('A');
-            int id;
-            do
-            {
-                string numeroVoo = Utils.ColetarString("Informe a identificação do voo EX: (V0000) ou digite 0 para Sair: ").PadRight(5, '0');
-                if (numeroVoo == "0") return;
-                if (!int.TryParse(numeroVoo.Substring(1, 4), out id)) Console.WriteLine("A identificação do voo foi digitada incorretamente");
-                else if (!db.VerificarDados($"SELECT idVoo FROM dbo.voo WHERE situacao = 'A' and idVoo = {id}")) Console.WriteLine("Voo não localizado");
-                else break;
-            } while (true);
-            IdVoo = id;
-            Valor = Utils.ColetarValorFloat("Informe o valor das passagens: ");
-            int qtd = db.getIntTable($"SELECT capacidade FROM dbo.aeronave, dbo.voo WHERE aeronave.inscAeronave = voo.aeronave and voo.idVoo = {IdVoo}");
+            //int qtd = db.getIntTable($"SELECT capacidade FROM dbo.aeronave, dbo.voo WHERE aeronave.inscAeronave = voo.aeronave and voo.idVoo = {IdVoo}");
             db.conn.Open();
-            for (int i = 1; i <= qtd; i++) db.InsertTablePassagem($"INSERT INTO dbo.passagem (idVoo, valor, situacao) VALUES ({this.IdVoo}, {this.Valor}, '{this.Situacao}')");
+            Valor = Utils.ColetarValorFloat("Informe o valor das passagens: ");
+            SqlCommand sql_cmnd = new SqlCommand($"dbo.CadastroPassagens {this.Valor};", db.conn);
+            sql_cmnd.CommandType = CommandType.StoredProcedure;
+            sql_cmnd.ExecuteNonQuery();
             db.conn.Close();
         }
 
