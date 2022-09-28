@@ -26,8 +26,6 @@ namespace PAeroporto
             AssentosOcupados = 0;
             Situacao = 'A';
         }
-        bool aux;
-
         public static String SufixoAeronave()
         {
             string sufixo;
@@ -166,7 +164,6 @@ namespace PAeroporto
             if (!db.UpdateTable($"UPDATE dbo.aeronave SET situacao = 'I' WHERE inscAeronave = {aeronave}")) Console.WriteLine("Houve um erro na solicitação");
             else Console.WriteLine("Solicitação efetuada com sucesso!!!");
         }
-
         public static void AtivarCadastro(String aeronave, Db_Aeroporto db)
         {
             int confirmar;
@@ -201,6 +198,13 @@ namespace PAeroporto
             string sql = $"SELECT aeronave.inscAeronave, companhiaAerea.razaoSocial, aeronave.capacidade, aeronave.ultimaVenda, aeronave.dataCadastro, aeronave.situacao" +
                 $" FROM dbo.aeronave, dbo.companhiaAerea WHERE aeronave.cnpjCompAerea = companhiaAerea.cnpj";
             db.SelectAeronave(sql);
+        }
+        public static void Listar(string inscricao)
+        {
+            Db_Aeroporto db = new Db_Aeroporto();
+            string sql = $"SELECT aeronave.inscAeronave, companhiaAerea.razaoSocial, aeronave.capacidade, aeronave.ultimaVenda, aeronave.dataCadastro, aeronave.situacao" +
+                $" FROM dbo.aeronave, dbo.companhiaAerea WHERE inscAeronave = '{inscricao}'";
+            if (!db.SelectAeronave(sql)) Console.WriteLine("Aeronave não localizada!!!"); 
         }
 
     }

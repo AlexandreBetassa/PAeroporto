@@ -219,6 +219,63 @@ namespace PAeroporto
             }
             return aux;
         }
+        public bool SelectVoo(string sql)
+        {
+            bool aux = false;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows) aux = false;
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Identificação do Voo: V{r.GetInt32(0):0000}");
+                        Console.WriteLine($"Assentos Ocupados: {r.GetInt32(1)}");
+                        Console.WriteLine($"Destino: {r.GetString(2)}");
+                        Console.WriteLine($"Aeronave: {r.GetString(3)}");
+                        Console.WriteLine($"Companhia Aérea: {r.GetString(4)}");
+                        Console.WriteLine($"Data do voo: {r.GetDateTime(5)}");
+                        Console.WriteLine($"Data de cadastro do voo: {r.GetDateTime(6)}");
+                        Console.WriteLine($"Situação voo: {r.GetString(7)}");
+                        aux = true;
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            return aux;
+        }
+        public bool SelectIatas(string sql)
+        {
+            bool aux = false;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows) aux = false;
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Destino: {r.GetString(0)}\n");
+                        Console.WriteLine($"Sigla (Iata): {r.GetString(1)}\n");
+                        aux = true;
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            conn.Close();
+            return aux;
+        }
         public string getDadoTable(string sql)
         {
             string texto = "";

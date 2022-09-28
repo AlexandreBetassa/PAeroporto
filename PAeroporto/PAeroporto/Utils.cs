@@ -216,7 +216,7 @@ namespace PAeroporto
             do
             {
                 Console.Write(texto);
-                valor = Console.ReadLine();
+                valor = Console.ReadLine().ToUpper();
                 if (String.IsNullOrWhiteSpace(valor))
                 {
                     Console.WriteLine("Insira uma informação válida...");

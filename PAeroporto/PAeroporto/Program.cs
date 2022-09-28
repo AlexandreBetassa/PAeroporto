@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Net.WebSockets;
 using System.Text;
@@ -33,10 +34,10 @@ namespace PAeroporto
                         Console.Clear();
                         MenuAeronave();
                         break;
-                    //case 4:
-                    //    Console.Clear();
-                    //    MenuVoo(listaVoos, listaIatas, listaAeronaves);
-                    //    break;
+                    case 4:
+                        Console.Clear();
+                        MenuVoo();
+                        break;
                     //case 5:
                     //    Console.Clear();
                     //    MenuPassagem(listaPassagensVoos, listaVoos, listaPassagemVoo);
@@ -61,8 +62,6 @@ namespace PAeroporto
                 }
             } while (true);
         }
-
-
 
         #region Menus
         public static int Menu()
@@ -204,20 +203,18 @@ namespace PAeroporto
                 Utils.Pause();
             } while (true);
         }
-
         public static void MenuAeronave()
         {
             do
             {
                 Console.Clear();
                 Console.WriteLine("### MENU AERONAVE ###");
+                Console.WriteLine("0 - Sair do Menu de Aeronaves");
                 Console.WriteLine("1 - Cadastrar Aeronaves");
                 Console.WriteLine("2 - Listar Aeronaves");
                 Console.WriteLine("3 - Editar Aeronave");
-                Console.WriteLine("4 - Listar Aeronaves");
-                Console.WriteLine("0 - Sair do Menu de Aeronaves");
-                Console.Write("Opção: ");
-                int opc = int.Parse(Console.ReadLine());
+                Console.WriteLine("4 - Consultar Aeronave");
+                int opc = Utils.ColetarValorInt("Informe opção: ");
 
                 switch (opc)
                 {
@@ -236,18 +233,63 @@ namespace PAeroporto
                         Aeronave.EditarAeronave();
                         break;
                     case 4:
-                    //    foreach (Aeronave item in listaAeronaves)
-                    //        if (item.Situacao == 'A')
-                    //            Console.WriteLine(item.ToString() + "\n");
-                    //    break;
+                        Console.Clear();
+                        Console.WriteLine("### BUSCAR AERONAVE ###");
+                        string inscricao = Utils.ColetarString("Informe a inscrição da aeronave que deseja consultar: ");
+                        Aeronave.Listar(inscricao);
+                        break;
                     case 0:
-                        Console.WriteLine("Você saiu do Menu de Aeronaves!");
                         return;
                     default:
                         Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
                         break;
                 }
                 Utils.Pause();
+            } while (true);
+        }
+        public static void MenuVoo()
+        {
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("### VOOS ###");
+                Console.WriteLine("1 - Cadastrar Voo");
+                Console.WriteLine("2 - Buscar Voo");
+                Console.WriteLine("3 - Editar Voo");
+                Console.WriteLine("4 - Listar Voos");
+                Console.WriteLine("0 - Sair do Menu de Voos");
+                int opc = Utils.ColetarValorInt("Opção: ");
+
+                switch (opc)
+                {
+                    case 1:
+                        Console.Clear();
+                        Console.WriteLine("### CADASTRAR NOVO VOO ###");
+                        Voo voo = new Voo();
+                        voo.CadastrarVoo();
+                        break;
+                    case 2:
+                        Console.Clear();
+                        Console.WriteLine("### CONSULTAR VOO ###");
+                        string numeroVoo = Utils.ColetarString("Informe a identificação do voo EX: (V0000): ").PadRight(5, '0');
+                        int idVoo = int.Parse(numeroVoo.Substring(1, 4));
+                        Voo.Buscar(idVoo);
+                        break;
+                    case 3:
+                        Console.Clear();
+                        Console.WriteLine("### EDITAR VOO ###");
+                        Voo.EditarVoo();
+                        break;
+                    //case 4:
+                    //    foreach (Voo item in listaVoos)
+                    //        Console.WriteLine(item.ToString() + "\n");
+                    //    break;
+                    case 0:
+                        return;
+                    default:
+                        Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
+                        break;
+                }
             } while (true);
         }
 
