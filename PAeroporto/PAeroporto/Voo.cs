@@ -24,7 +24,6 @@ namespace PAeroporto
             Situacao = 'A';
             AssentosOcupados = 0;
         }
-
         public void CadastrarVoo()
         {
             Db_Aeroporto db = new Db_Aeroporto();
@@ -53,7 +52,6 @@ namespace PAeroporto
             if (!db.InsertTable(sql)) Console.WriteLine("Ocorreu um erro na solicitação");
             else Console.WriteLine("Solicitação efetuada com sucesso!!");
         }
-
         public static void Buscar(char situacao)
         {
             Db_Aeroporto db = new Db_Aeroporto();

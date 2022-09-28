@@ -38,10 +38,10 @@ namespace PAeroporto
                         Console.Clear();
                         MenuVoo();
                         break;
-                    //case 5:
-                    //    Console.Clear();
-                    //    MenuPassagem(listaPassagensVoos, listaVoos, listaPassagemVoo);
-                    //    break;
+                    case 5:
+                        Console.Clear();
+                        MenuPassagem();
+                        break;
                     //case 6:
                     //    Console.Clear();
                     //    MenuVenda(listaVendas, listaPassageiros);
@@ -292,6 +292,44 @@ namespace PAeroporto
                         break;
                 }
                 Utils.Pause();
+            } while (true);
+        }
+        public static void MenuPassagem()
+        {
+            do
+            {
+                Console.WriteLine("1 - Cadastrar Passagem");
+                Console.WriteLine("2 - Buscar Passagem");
+                Console.WriteLine("3 - Editar Passagem");
+                Console.WriteLine("4 - Listar Passagens");
+                Console.WriteLine("0 - Sair do Menu de Passagems");
+                int opc = Utils.ColetarValorInt("Informe opção: ");
+
+                switch (opc)
+                {
+                    case 1:
+                        PassagemVoo passagem = new PassagemVoo();
+                        passagem.CadastrarPassagemVoo();
+                        break;
+                    //case 2:
+                    //    Console.Write("Informe o ID da Passagem para busca: ");
+                    //    string idPassagem = Console.ReadLine();
+                    //    Console.WriteLine(BuscarPassagem(listaPassagens, idPassagem).ToString());
+                    //    break;
+                    //case 3:
+                    //    EditarPassagem(listaPassagens);
+                    //    break;
+                    //case 4:
+                    //    foreach (PassagemVoo item in listaPassagens)
+                    //        Console.WriteLine(item.ToString() + "\n");
+                    //    break;
+                    case 0:
+                        Console.WriteLine("Você saiu do Menu de Passagens!");
+                        return;
+                    default:
+                        Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
+                        break;
+                }
             } while (true);
         }
 
