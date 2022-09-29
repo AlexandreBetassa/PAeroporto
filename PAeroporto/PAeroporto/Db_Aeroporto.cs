@@ -64,8 +64,8 @@ namespace PAeroporto
                         Console.WriteLine($"Id aeronave: {r.GetString(2)}");
                         Console.WriteLine($"Data voo: {r.GetDateTime(3)}");
                         Console.WriteLine($"Data de cadastro: {r.GetDateTime(4).ToShortDateString()}");
-                        Console.WriteLine($"Valor: RS{Convert.ToSingle(r[5]):F}");
-                        Console.WriteLine($"Situação: RS{r.GetString(6)}");
+                        Console.WriteLine($"Valor: R${Convert.ToSingle(r[5]):F}");
+                        Console.WriteLine($"Situação: {r.GetString(6)}");
                         Console.WriteLine();
                     }
                 }
