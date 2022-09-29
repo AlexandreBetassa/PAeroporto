@@ -342,16 +342,16 @@ namespace PAeroporto
                         Venda venda = new Venda();
                         venda.CadastrarVenda();
                         break;
-                    //case 2:
-                    //    Console.WriteLine(BuscarVenda(listaVendas).ToString());
-                    //    break;
+                    case 2:
+                        Venda.Buscar();
+                        break;
                     //case 3:
                     //    foreach (Venda item in listaVendas)
                     //        Console.WriteLine(item.ToString() + "\n");
                     //    break;
-                    //case 0:
-                    //    Console.WriteLine("Você saiu do Menu de Vendas!");
-                    //    return;
+                    case 0:
+                        Console.WriteLine("Você saiu do Menu de Vendas!");
+                        return;
                     default:
                         Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
                         break;

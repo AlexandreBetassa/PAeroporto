@@ -43,25 +43,101 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-        public bool InsertTablePassagem(string sql)
+        public bool SelectTablePassagem(string sql)
         {
-            bool aux = false;
-            int row;
             try
             {
+                conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                row = cmd.ExecuteNonQuery();
-                if (row != 0) aux = true;
-                else aux = false;
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows)
+                {
+                    conn.Close();
+                    return false;
+                }
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Id passagem: PA{r.GetInt32(0):0000}");
+                        Console.WriteLine($"Id voo: V{r.GetInt32(1):0000}");
+                        Console.WriteLine($"Id aeronave: {r.GetString(2)}");
+                        Console.WriteLine($"Data voo: {r.GetDateTime(3)}");
+                        Console.WriteLine($"Data de cadastro: {r.GetDateTime(4).ToShortDateString()}");
+                        Console.WriteLine($"Valor: RS{Convert.ToSingle(r[5]):F}");
+                        Console.WriteLine($"Situação: RS{r.GetString(6)}");
+                        Console.WriteLine();
+                    }
+                }
             }
             catch (SqlException msg)
             {
-                if (msg.Number == 2627) Console.WriteLine($"Já existe o passageiro cadastrado!!!");
-                else if (msg.Number == 2628) Console.WriteLine($"Valores truncados da coluna!!!");
-                else Console.WriteLine($"Erro código: {msg.Number}");
-                Utils.Pause();
+                Console.WriteLine(msg.Number);
             }
-            return aux;
+            conn.Close();
+            return true;
+        }
+        public bool SelectTableVenda(string sql)
+        {
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows)
+                {
+                    conn.Close();
+                    return false;
+                }
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Id Venda: {r.GetInt32(0)}");
+                        Console.WriteLine($"Data da venda: {r.GetDateTime(1).ToShortDateString()}");
+                        Console.WriteLine($"Nome do passageiro: {r.GetString(2)}");
+                        Console.WriteLine($"Data de nascimento: {r.GetDateTime(3).ToShortDateString()}");
+                        Console.WriteLine($"Valor Total: R${Convert.ToSingle(r[4]):F}");
+                        Console.WriteLine();
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine(msg.Number);
+            }
+            conn.Close();
+            return true;
+        }
+        public bool SelectTableItemVenda(string sql)
+        {
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows)
+                {
+                    conn.Close();
+                    return false;
+                }
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Item Venda: {r.GetInt32(0):00000}");
+                        Console.WriteLine($"Id Passagem: PA{r.GetInt32(1):0000}");
+                        Console.WriteLine($"Valor Unitário Passagem: R${Convert.ToSingle(r[2]):F}");
+                        Console.WriteLine();
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine(msg.Number);
+            }
+            conn.Close();
+            return true;
         }
         public bool SelectTable(string sql)
         {
@@ -334,7 +410,6 @@ namespace PAeroporto
                 SqlDataReader r = cmd.ExecuteReader();
                 r.Read();
                 valor = r.GetInt32(0);
-                Console.WriteLine(valor);
             }
             catch (SqlException msg)
             {
@@ -353,7 +428,6 @@ namespace PAeroporto
                 SqlDataReader r = cmd.ExecuteReader();
                 r.Read();
                 valor = Convert.ToSingle(r[0]);
-                Console.WriteLine(valor);
             }
             catch (SqlException msg)
             {

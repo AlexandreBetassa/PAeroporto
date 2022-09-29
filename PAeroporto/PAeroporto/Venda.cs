@@ -82,5 +82,19 @@ namespace PAeroporto
             } while (true);
             db.UpdateTable($"UPDATE dbo.venda SET valorTotal = {ValorTotal} WHERE id = {idVenda}");
         }
+
+        public static void Buscar()
+        {
+            Db_Aeroporto db = new Db_Aeroporto();
+            int venda = Utils.ColetarValorInt("Informe o número da venda realizada: ");
+            if (!db.SelectTableVenda($"SELECT venda.id, venda.dataVenda, passageiro.nome, passageiro.dataNasc, venda.valorTotal" +
+                $" FROM passageiro, venda WHERE venda.id = {venda}")) Console.WriteLine("Dados não localizados");
+            if (!db.SelectTableItemVenda($"SELECT itemVenda.idItemVenda, itemVenda.idPassagem, passagem.valor FROM dbo.passagem, dbo.ItemVenda WHERE itemVenda.idPassagem = passagem.idPassagem AND itemVenda.idVenda = {venda}")) Console.WriteLine("Não há itens cadastrados nesta venda"); ;
+
+            //    Console.WriteLine($"Item Venda: {r.GetInt32(0):00000}");
+            //Console.WriteLine($"Id Passagem: PA{r.GetInt32(1):00000}");
+            //Console.WriteLine($"Valor Unitário Passagem: R${Convert.ToSingle(r[2]):F}");
+        }
+
     }
 }
