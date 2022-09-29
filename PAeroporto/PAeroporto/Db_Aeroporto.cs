@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
@@ -215,6 +216,7 @@ namespace PAeroporto
             {
 
             }
+            conn.Close();
             return true;
         }
         public bool SelectRestritos(string sql)
@@ -322,8 +324,43 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-
-
-
+        public int getValorInt(string sql)
+        {
+            int valor = 0;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                r.Read();
+                valor = r.GetInt32(0);
+                Console.WriteLine(valor);
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            conn.Close();
+            return valor;
+        }
+        public float getValorFloat(string sql)
+        {
+            float valor = 0;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                r.Read();
+                valor = Convert.ToSingle(r[0]);
+                Console.WriteLine(valor);
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            conn.Close();
+            return valor;
+        }
     }
 }
