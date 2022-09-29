@@ -16,28 +16,7 @@ namespace PAeroporto
         public ItemVenda()
         { }
 
-        //public void CadastrarItemVenda(List<PassagemVoo> listaPassagensVoos, String idItemVenda)
-        //{
-        //    Console.WriteLine(">>>CADASTRO DE VENDA DE ITEM<<<");
 
-        //    IdItemVenda = idItemVenda;
-
-        //    //Lista de Passagens
-        //    Console.WriteLine("Lista de Passagens:");
-        //    foreach (PassagemVoo item in listaPassagensVoos)
-        //    {
-        //        Console.WriteLine(item.ToString());
-        //    }
-
-        //    Console.Write("Informe qual ID da Passagem pertence a venda deste Item: ");
-        //    string iditemvenda = Console.ReadLine();
-
-        //    foreach (PassagemVoo item in listaPassagensVoos)
-        //    {
-        //        if (item.IdPassagem == iditemvenda)
-        //            this.PassagemVoo = item.IdPassagem;
-        //    }
-        //}
 
         public override string ToString()
         {
