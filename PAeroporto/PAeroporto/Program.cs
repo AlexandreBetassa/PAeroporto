@@ -293,38 +293,6 @@ namespace PAeroporto
                 Utils.Pause();
             } while (true);
         }
-        //public static void MenuPassagem()
-        //{
-        //    do
-        //    {
-        //        Console.WriteLine("0 - Sair do Menu de Passagems");
-        //        Console.WriteLine("1 - Buscar Passagem");
-        //        Console.WriteLine("2 - Editar Passagem");
-        //        Console.WriteLine("3 - Listar Passagens");
-        //        int opc = Utils.ColetarValorInt("Informe opção: ");
-
-        //        switch (opc)
-        //        {
-        //            case 1:
-        //                Console.Write("Informe o ID da Passagem para busca: ");
-        //                string idPassagem = Console.ReadLine();
-        //                break;
-        //            //case 3:
-        //            //    EditarPassagem(listaPassagens);
-        //            //    break;
-        //            //case 4:
-        //            //    foreach (PassagemVoo item in listaPassagens)
-        //            //        Console.WriteLine(item.ToString() + "\n");
-        //            //    break;
-        //            case 0:
-        //                Console.WriteLine("Você saiu do Menu de Passagens!");
-        //                return;
-        //            default:
-        //                Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
-        //                break;
-        //        }
-        //    } while (true);
-        ////}
         public static void MenuVenda()
         {
             do
@@ -425,9 +393,6 @@ namespace PAeroporto
             if (!db.InsertTable(sql)) Console.WriteLine("Ocorreu um erro na solicitação");
             else Console.WriteLine("Solicitação efetuado com sucesso");
         }
-
-
-
 
         #endregion Companhia aerea
 
