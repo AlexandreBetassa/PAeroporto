@@ -12,8 +12,8 @@ namespace PAeroporto
     internal class Db_Aeroporto
     {
         string conexao = "Data Source = DESKTOP-49RHHLK\\MSSQL;TrustServerCertificate=True;Initial Catalog=aeroporto;User ID=sa;Password=834500";
-        SqlConnection conn;
-
+        //SqlConnection conn;
+        public SqlConnection conn { get; set; }
         public Db_Aeroporto()
         {
             conn = new SqlConnection(conexao);
@@ -26,7 +26,7 @@ namespace PAeroporto
             int row;
             try
             {
-                conn.Open();
+                if (conn.State == 0) conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 row = cmd.ExecuteNonQuery();
                 if (row != 0) aux = true;
@@ -40,6 +40,26 @@ namespace PAeroporto
                 Utils.Pause();
             }
             conn.Close();
+            return aux;
+        }
+        public bool InsertTablePassagem(string sql)
+        {
+            bool aux = false;
+            int row;
+            try
+            {
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                row = cmd.ExecuteNonQuery();
+                if (row != 0) aux = true;
+                else aux = false;
+            }
+            catch (SqlException msg)
+            {
+                if (msg.Number == 2627) Console.WriteLine($"Já existe o passageiro cadastrado!!!");
+                else if (msg.Number == 2628) Console.WriteLine($"Valores truncados da coluna!!!");
+                else Console.WriteLine($"Erro código: {msg.Number}");
+                Utils.Pause();
+            }
             return aux;
         }
         public bool SelectTable(string sql)
@@ -142,6 +162,32 @@ namespace PAeroporto
             }
             return aux;
         }
+        public bool SelectPassagem(string sql)
+        {
+            bool aux = false;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                if (!r.HasRows) aux = false;
+                else
+                {
+                    while (r.Read())
+                    {
+                        Console.WriteLine($"Destino: {r.GetString(0)}\n");
+                        Console.WriteLine($"Sigla (Iata): {r.GetString(1)}\n");
+                        aux = true;
+                    }
+                }
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            conn.Close();
+            return aux;
+        }
         public bool VerificarDados(string sql)
         {
             bool aux;
@@ -239,7 +285,7 @@ namespace PAeroporto
                         Console.WriteLine($"Companhia Aérea: {r.GetString(4)}");
                         Console.WriteLine($"Data do voo: {r.GetDateTime(5)}");
                         Console.WriteLine($"Data de cadastro do voo: {r.GetDateTime(6)}");
-                        Console.WriteLine($"Situação voo: {r.GetString(7)}");
+                        Console.WriteLine($"Situação voo (A - Ativo) (C - Cancelado): {r.GetString(7)}");
                         aux = true;
                     }
                 }
@@ -276,23 +322,8 @@ namespace PAeroporto
             conn.Close();
             return aux;
         }
-        public string getDadoTable(string sql)
-        {
-            string texto = "";
-            try
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                SqlDataReader r = cmd.ExecuteReader();
-                if (!r.Read()) texto = r.GetString(0);
 
-            }
-            catch (SqlException msg)
-            {
-                Console.WriteLine($"Erro código {msg.Number}");
-            }
-            return texto;
-        }
+
 
     }
 }

@@ -38,10 +38,10 @@ namespace PAeroporto
                         Console.Clear();
                         MenuVoo();
                         break;
-                    //case 5:
-                    //    Console.Clear();
-                    //    MenuPassagem(listaPassagensVoos, listaVoos, listaPassagemVoo);
-                    //    break;
+                    case 5:
+                        Console.Clear();
+                        MenuPassagem();
+                        break;
                     //case 6:
                     //    Console.Clear();
                     //    MenuVenda(listaVendas, listaPassageiros);
@@ -256,7 +256,7 @@ namespace PAeroporto
                 Console.WriteLine("1 - Cadastrar Voo");
                 Console.WriteLine("2 - Buscar Voo");
                 Console.WriteLine("3 - Editar Voo");
-                Console.WriteLine("4 - Listar Voos");
+                Console.WriteLine("4 - Listar Voos Ativos");
                 Console.WriteLine("0 - Sair do Menu de Voos");
                 int opc = Utils.ColetarValorInt("Opção: ");
 
@@ -272,19 +272,53 @@ namespace PAeroporto
                         Console.Clear();
                         Console.WriteLine("### CONSULTAR VOO ###");
                         string numeroVoo = Utils.ColetarString("Informe a identificação do voo EX: (V0000): ").PadRight(5, '0');
-                        int idVoo = int.Parse(numeroVoo.Substring(1, 4));
-                        Voo.Buscar(idVoo);
+                        if (!int.TryParse(numeroVoo.Substring(1, 4), out int idVoo)) Console.WriteLine("A identificação do voo foi digitada incorretamente");
+                        else Voo.Buscar(idVoo);
                         break;
                     case 3:
                         Console.Clear();
                         Console.WriteLine("### EDITAR VOO ###");
                         Voo.EditarVoo();
                         break;
+                    case 4:
+                        Console.Clear();
+                        Console.WriteLine("### LISTAR VOOS ATIVOS ###");
+                        Voo.Buscar('A');
+                        break;
+                    case 0:
+                        return;
+                    default:
+                        Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
+                        break;
+                }
+                Utils.Pause();
+            } while (true);
+        }
+        public static void MenuPassagem()
+        {
+            do
+            {
+                Console.WriteLine("0 - Sair do Menu de Passagems");
+                Console.WriteLine("1 - Buscar Passagem");
+                Console.WriteLine("2 - Editar Passagem");
+                Console.WriteLine("3 - Listar Passagens");
+                int opc = Utils.ColetarValorInt("Informe opção: ");
+
+                switch (opc)
+                {
+                    case 1:
+                        Console.Write("Informe o ID da Passagem para busca: ");
+                        string idPassagem = Console.ReadLine();
+                        break;
+                    //case 3:
+                    //    EditarPassagem(listaPassagens);
+                    //    break;
                     //case 4:
-                    //    foreach (Voo item in listaVoos)
+                    //    foreach (PassagemVoo item in listaPassagens)
                     //        Console.WriteLine(item.ToString() + "\n");
                     //    break;
                     case 0:
+                        Console.WriteLine("Você saiu do Menu de Passagens!");
                         return;
                     default:
                         Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");

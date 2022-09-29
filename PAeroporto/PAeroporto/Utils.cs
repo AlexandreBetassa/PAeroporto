@@ -226,5 +226,19 @@ namespace PAeroporto
                 return valor;
             } while (true);
         }
+
+        public static float ColetarValorFloat(string texto)
+        {
+            do
+            {
+                Console.Write(texto);
+                if (!float.TryParse(Console.ReadLine(), out  float valor) || valor < 0)
+                {
+                    Console.WriteLine("Informe uma opção válida...");
+                    Pause();
+                }
+                else return valor;
+            } while (true);
+        }
     }
 }
