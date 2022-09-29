@@ -24,12 +24,6 @@ namespace PAeroporto
         {
             Console.WriteLine(">>>CADASTRO DE VENDAS<<<");
 
-            //Deverá ser um código que irá identificar a venda.Deverá
-            //ser um número sequencial que iniciará em 1 e, através
-            //deste sistema poderá ir apenas até a venda 99.999.
-            //Sendo assim, será numérico, mas deverá ter no máximo
-            //5 dígitos.
-
             Console.WriteLine("Informe o código de IDENTIFICAÇÃO DA VENDA: ");
             IdVenda = Console.ReadLine();
 
