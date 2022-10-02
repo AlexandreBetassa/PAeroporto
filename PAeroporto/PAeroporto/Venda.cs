@@ -161,9 +161,32 @@ namespace PAeroporto
             } while (true);
         }
 
+
         public static void ConsultarPassagem()
         {
-            //A FAZER
+            Console.Clear();
+            Console.WriteLine("### CONSULTA DE PASSAGEM ###");
+            Db_Aeroporto db = new Db_Aeroporto();
+            int idVoo, idPassagem;
+            do
+            {
+                string AuxIdVoo = Utils.ColetarString("Informe a identificação do voo ou 0 para sair: ");
+                if (AuxIdVoo == "0") return;
+                else if (!int.TryParse(AuxIdVoo.Substring(1, 4), out idVoo)) Console.WriteLine("A identificação do voo foi digitada incorretamente");
+                else break;
+            } while (true);
+            do
+            {
+                string auxIdPassagem = Utils.ColetarString("Informe a identificação da passagem ou 0 para sair: ");
+                if (auxIdPassagem == "0") return;
+                else if (!int.TryParse(auxIdPassagem.Substring(2, 5), out idPassagem)) Console.WriteLine("A identificação da passagem foi digitada incorretamente");
+                else break;
+            } while (true);
+
+            string sql = ($"SELECT passagem.idPassagem, passagem.idVoo, voo.aeronave, voo.dataVoo, passagem.dataCadastro, passagem.valor, " +
+    $"passagem.situacao FROM dbo.passagem, dbo.voo " +
+    $"WHERE passagem.idPassagem = {idPassagem} AND passagem.idVoo = {idVoo} AND voo.IdVoo = passagem.idVoo ");
+            db.SelectPassagem(sql);
 
         }
 
