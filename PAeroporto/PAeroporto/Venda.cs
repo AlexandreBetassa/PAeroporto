@@ -32,9 +32,14 @@ namespace PAeroporto
             {
                 cpf = Utils.ColetarString("Informe o CPF para cadastro do passageiro: ");
                 if (!Utils.ValidarCpf(cpf)) Console.WriteLine("CPF inválido");
-                else if (!db.VerificarDados($"SELECT cpf FROM dbo. restritos WHERE cpf = '{cpf}'"))
+                else if (db.VerificarDados($"SELECT cpf FROM dbo. restritos WHERE cpf = '{cpf}'"))
                 {
                     Console.WriteLine("Não é possível efetuar vendas para este CPF pois está na lista de restritos");
+                    return;
+                }
+                else if (!db.getValorDateTime($"SELECT dataNasc FROM dbo.passageiro WHERE cpf = '{cpf}'"))
+                {
+                    Console.WriteLine("Não é possivel venda de passagens para menores de 18 anos");
                     return;
                 }
                 else if (!db.VerificarDados($"SELECT cpf FROM dbo.passageiro WHERE cpf = '{cpf}'")) Console.WriteLine("CPF não localizado");
@@ -63,13 +68,25 @@ namespace PAeroporto
                     else if (!db.VerificarDados($"SELECT idVoo FROM dbo.voo WHERE idVoo = {idVoo} AND situacao = 'A'")) Console.WriteLine("Voo não localizado");
                     else break;
                 } while (true);
-                int idPassagem = db.getValorInt($"SELECT MAX(idPassagem) FROM passagem WHERE situacao = 'L' and idVoo = {idVoo}");
+                int idPassagem = db.getValorInt($"SELECT MIN(idPassagem) FROM passagem WHERE situacao = 'L' and idVoo = {idVoo}");
                 float valor = db.getValorFloat($"SELECT valor FROM dbo.passagem WHERE idPassagem = {idPassagem} AND idVoo = {idVoo} and situacao = 'L'");
 
+                string sql = ($"SELECT passagem.idPassagem, passagem.idVoo, voo.aeronave, voo.dataVoo, passagem.dataCadastro, passagem.valor, " +
+                    $"passagem.situacao FROM dbo.passagem, dbo.voo " +
+                    $"WHERE passagem.idPassagem = {idPassagem} AND passagem.idVoo = {idVoo} AND voo.IdVoo = passagem.idVoo ");
+                db.SelectPassagem(sql);
 
-                ValorTotal += valor;
-                db.InsertTable($"INSERT INTO itemVenda (idVenda, idPassagem) VALUES ({this.idVenda}, {idPassagem})");
-                db.UpdateTable($"UPDATE dbo.passagem SET situacao = 'R' WHERE idPassagem = {idPassagem} AND idVoo = {idVoo}");
+
+                int confirmar = Utils.ColetarValorInt("Deseja confirmar a seleção da passagem? (1 - Sim) (2 - Não)");
+                if (confirmar == 1)
+                {
+                    ValorTotal += valor;
+                    db.InsertTable($"INSERT INTO itemVenda (idVenda, idPassagem) VALUES ({this.idVenda}, {idPassagem})");
+                    db.UpdateTable($"UPDATE dbo.passagem SET situacao = 'R' WHERE idPassagem = {idPassagem} AND idVoo = {idVoo}");
+                    count++;
+                }
+
+                Console.WriteLine("VALOR TOTAL ATÉ AGORA: R$" + ValorTotal.ToString("F"));
                 int opc;
                 do
                 {
@@ -78,9 +95,14 @@ namespace PAeroporto
                     else break;
                 } while (true);
                 if (opc == 2) break;
-                count++;
             } while (true);
             db.UpdateTable($"UPDATE dbo.venda SET valorTotal = {ValorTotal} WHERE id = {idVenda}");
+
+            Console.Clear();
+            Console.WriteLine("### VALOR TOTAL DA TRANSAÇÃO ###");
+            db.SelectTableVenda($"SELECT venda.id, venda.dataVenda, passageiro.nome, passageiro.dataNasc, venda.valorTotal" +
+                $" FROM passageiro, venda WHERE venda.id = {idVenda}");
+
         }
 
         public static void Buscar()
@@ -89,14 +111,54 @@ namespace PAeroporto
             int venda = Utils.ColetarValorInt("Informe o número da venda realizada: ");
             if (!db.SelectTableVenda($"SELECT venda.id, venda.dataVenda, passageiro.nome, passageiro.dataNasc, venda.valorTotal" +
                 $" FROM passageiro, venda WHERE venda.id = {venda}")) Console.WriteLine("Dados não localizados");
-            if (!db.SelectTableItemVenda($"SELECT itemVenda.idItemVenda, itemVenda.idPassagem, passagem.valor FROM dbo.passagem, " +
-                $"dbo.ItemVenda WHERE itemVenda.idPassagem = passagem.idPassagem AND itemVenda.idVenda = {venda}"))
-                Console.WriteLine("Não há itens cadastrados nesta venda");
         }
 
         public static void EditarPassagem()
         {
-        //A FAZER
+            Db_Aeroporto db = new Db_Aeroporto();
+            int idVoo, idPassagem;
+            do
+            {
+                string AuxIdVoo = Utils.ColetarString("Informe a identificação do voo ou 0 para sair: ");
+                if (AuxIdVoo == "0") return;
+                else if (!int.TryParse(AuxIdVoo.Substring(1, 4), out idVoo)) Console.WriteLine("A identificação do voo foi digitada incorretamente");
+                else break;
+            } while (true);
+            do
+            {
+                string auxIdPassagem = Utils.ColetarString("Informe a identificação da passagem ou 0 para sair: ");
+                if (auxIdPassagem == "0") return;
+                else if (!int.TryParse(auxIdPassagem.Substring(2, 5), out idPassagem)) Console.WriteLine("A identificação da passagem foi digitada incorretamente");
+                else break;
+            } while (true);
+
+            if (!db.VerificarDados($"SELECT idPassagem, idVoo FROM dbo.passagem WHERE idVoo = {idVoo} AND idPassagem = {idPassagem};"))
+            {
+                Console.WriteLine("Passage, não localizada!!!");
+                return;
+            }
+
+            do
+            {
+                int op = Utils.ColetarValorInt("Deseja cancelar a reserva da passagem ou confirmar? (0 - Retornar ao Menu) (1 - Confirmar) (2 - Cancelar): ");
+                switch (op)
+                {
+                    case 0:
+                        return;
+                    case 1:
+                        if (!db.UpdateTable($"UPDATE dbo.passagem SET situacao = 'C' WHERE idVoo = {idVoo} AND idPassagem = {idPassagem}")) Console.WriteLine("Ocorreu um erro na solicitação");
+                        else Console.WriteLine("Operação efetuada com sucesso");
+                        return;
+                    case 2:
+                        if (!db.UpdateTable($"UPDATE dbo.passagem SET situacao = 'L' WHERE idVoo = {idVoo} AND idPassagem = {idPassagem}")) Console.WriteLine("Ocorreu um erro na solicitação");
+                        else Console.WriteLine("Operação efetuada com sucesso");
+                        return;
+                    default:
+                        Console.WriteLine("Operação inválida");
+                        break;
+                }
+
+            } while (true);
         }
 
         public static void ConsultarPassagem()
