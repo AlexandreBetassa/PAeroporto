@@ -252,8 +252,13 @@ namespace PAeroporto
                 {
                     while (r.Read())
                     {
-                        Console.WriteLine($"Destino: {r.GetString(0)}\n");
-                        Console.WriteLine($"Sigla (Iata): {r.GetString(1)}\n");
+                        Console.WriteLine($"Numero da passagem: PA{r.GetInt32(0):0000}");
+                        Console.WriteLine($"Numero do voo: V{r.GetInt32(1):0000}");
+                        Console.WriteLine($"Aeronave: {r.GetString(2)}");
+                        Console.WriteLine($"Data do Voo: {r.GetDateTime(3)}");
+                        Console.WriteLine($"Data de cadastro: {r.GetDateTime(4)}");
+                        Console.WriteLine($"Valor: {Convert.ToSingle(r[5]):F}");
+                        Console.WriteLine($"Situação: {r.GetString(6)}");
                         aux = true;
                     }
                 }
@@ -435,6 +440,26 @@ namespace PAeroporto
             }
             conn.Close();
             return valor;
+        }
+        public bool getValorDateTime(string sql)
+        {
+            DateTime valor = DateTime.Now;
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader r = cmd.ExecuteReader();
+                r.Read();
+                valor = r.GetDateTime(0);
+            }
+            catch (SqlException msg)
+            {
+                Console.WriteLine($"Erro código {msg.Number}");
+            }
+            conn.Close();
+
+            if (((valor - DateTime.Now).TotalDays) / 365 < 18) return false;
+            else return true;
         }
     }
 }

@@ -11,18 +11,24 @@ situacao char(1)
 );
 
 create table venda (
-id int identity constraint pk_venda primary key not null,
+id int constraint pk_venda primary key not null,
 dataVenda date not null,
 passageiroCpf varchar(11) foreign key (passageiroCpf) references passageiro (cpf) not null,
 valotTotal float not null,
 );
 
+alter table venda
+alter column valorTotal float null
+
 create table itemVenda(
-valorUnit float not null,
 idVenda int foreign key references venda(id) not null,
-idItemVenda int identity constraint pk_itemVenda primary key not null,
+idItemVenda int identity,
+idPassagem int 
+
+constraint pk_itemVenda primary key(idVenda, idItemVenda, idPassagem)
 );
 
+drop table itemVenda
 create table companhiaAerea(
 cnpj varchar(14) constraint pk_companhiaAerea primary key not null,
 razaoSocial varchar not null,
@@ -105,14 +111,30 @@ BEGIN
 	UPDATE dbo.passagem SET situacao = 'C' WHERE idVoo = @idVoo
 END
 
+create trigger AssenctosOcupados on passagem
+after update
+as if
+update(situacao)
+begin
+	declare 
+	@idVoo int,
+	@idPassagem int,
+	@assentosOcupados int,
+	@situacao char
 
-select voo.IdVoo, voo.assentosOcupado, iatas.nomeAeroporto, aeronave.inscAeronave, companhiaAerea.razaoSocial, voo.dataVoo, voo.dataCadastro, voo.situacao
-from dbo.voo, dbo.aeronave,dbo.companhiaAerea ,dbo.iatas
-Where iatas.sigla = voo.destino and companhiaAerea.cnpj = aeronave.cnpjCompAerea and aeronave.inscAeronave = voo.aeronave
 
+	select @idVoo = idVoo, @situacao = situacao, @idPassagem = idPassagem from inserted
+	select @assentosOcupados = ISNULL(assentosOcupado,0)
+	from voo
+	where idVoo = @idVoo
 
-
-
-
-
+	if(@situacao <> 'L')
+		begin
+		update dbo.voo set assentosOcupado += 1 where voo.idVoo = @idVoo
+		end
+	else
+		begin
+		update dbo.voo set assentosOcupado -= 1 where voo.idVoo = @idVoo
+		end
+end
 
