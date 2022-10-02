@@ -300,6 +300,7 @@ namespace PAeroporto
                 Console.WriteLine("1 - Venda de Passagem");
                 Console.WriteLine("2 - Buscar Venda");
                 Console.WriteLine("3 - Editar Satatus da Passagem");
+                Console.WriteLine("4 - Consultar Passagem");
                 Console.WriteLine("0 - Sair do Menu de Vendas");
                 Console.Write("Opção: ");
                 int opc = int.Parse(Console.ReadLine());
@@ -315,6 +316,9 @@ namespace PAeroporto
                         break;
                     case 3:
                         Venda.EditarPassagem();
+                        break;
+                    case 4:
+                        Venda.ConsultarPassagem();
                         break;
                     case 0:
                         Console.WriteLine("Você saiu do Menu de Vendas!");
