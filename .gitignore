@@ -348,3 +348,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/PAeroporto/Services/Services.csproj
+/PAeroporto/Services/DataBaseAeroporto.cs
+/PAeroporto/Models/Passageiro.cs
+/PAeroporto/Models/Models.csproj
+/PAeroporto/Controllers/PassageiroController.cs
+/PAeroporto/Controllers/Controllers.csproj

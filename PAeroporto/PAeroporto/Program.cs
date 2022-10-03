@@ -73,7 +73,6 @@ namespace PAeroporto
             Console.WriteLine("3 - Menu de Aeronaves");
             Console.WriteLine("4 - Menu de Voos");
             Console.WriteLine("5 - Menu de Vendas ");
-            Console.WriteLine("7 - Menu de Item Vendas ");
             Console.WriteLine("0 - Sair do Menu Principal");
             return Utils.ColetarValorInt("Informe opção: ");
         }
