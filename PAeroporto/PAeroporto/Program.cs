@@ -256,6 +256,7 @@ namespace PAeroporto
                 Console.WriteLine("2 - Buscar Voo");
                 Console.WriteLine("3 - Editar Voo");
                 Console.WriteLine("4 - Listar Voos Ativos");
+                Console.WriteLine("5 - Cadastrar aeroporto (Iata)");
                 Console.WriteLine("0 - Sair do Menu de Voos");
                 int opc = Utils.ColetarValorInt("Opção: ");
 
@@ -283,6 +284,11 @@ namespace PAeroporto
                         Console.Clear();
                         Console.WriteLine("### LISTAR VOOS ATIVOS ###");
                         Voo.Buscar('A');
+                        break;
+                    case 5:
+                        Console.Clear();
+                        Console.WriteLine("### CADASTRAR IATA ###");
+                        Voo.CadastrarIata();
                         break;
                     case 0:
                         return;

@@ -145,5 +145,27 @@ namespace PAeroporto
             else Console.WriteLine("Solicitação efetuada com sucesso!!!");
         }
 
+        public static void CadastrarIata()
+        {
+            String sigla, nome;
+            do
+            {
+                sigla = Utils.ColetarString("Informe a sigla da Iata (Máximo 3 letras): ");
+                if (sigla.Length > 3) Console.WriteLine("A sigla deve conter 3 letras");
+                else break;
+            } while (true);
+
+
+            do
+            {
+                nome = Utils.ColetarString("Informe o nome do aeroporto (Máximo 50 letras): ");
+                if (sigla.Length > 3) Console.WriteLine("O nome deve conter no máximo 50 letras");
+                else break;
+            } while (true);
+
+            Db_Aeroporto db = new Db_Aeroporto();
+            if (!db.InsertTable($"INSERT INTO dbo.Iatas (sigla, nomeAeroporto) VALUES('{sigla}', '{nome}')")) Console.WriteLine("Erro na solicitação");
+            else Console.WriteLine("Solicitação efetuada com sucesso!!!");
+        }
     }
 }
