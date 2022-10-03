@@ -5,20 +5,17 @@ cpf varchar(11) constraint pk_passageiro primary key not null,
 nome varchar(50) not null,
 dataNasc date not null,
 sexo varchar(10) not null,
-ultimaCompra date,
-dataCad date not null, 
+ultimaCompra datetime,
+dataCad datetime not null, 
 situacao char(1)
 );
 
 create table venda (
-id int constraint pk_venda primary key not null,
-dataVenda date not null,
+id int identity constraint pk_venda primary key not null,
+dataVenda datetime not null,
 passageiroCpf varchar(11) foreign key (passageiroCpf) references passageiro (cpf) not null,
 valotTotal float not null,
 );
-
-alter table venda
-alter column valorTotal float null
 
 create table itemVenda(
 idVenda int foreign key references venda(id) not null,
@@ -28,13 +25,12 @@ idPassagem int
 constraint pk_itemVenda primary key(idVenda, idItemVenda, idPassagem)
 );
 
-drop table itemVenda
 create table companhiaAerea(
 cnpj varchar(14) constraint pk_companhiaAerea primary key not null,
 razaoSocial varchar not null,
 dataAbertura date not null,
-dataCadastro date not null,
-ultimoVoo date not null,
+dataCadastro datetime not null,
+ultimoVoo datetime not null,
 situacao char(1)
 );
 
@@ -42,9 +38,9 @@ create table aeronave(
 inscAeronave varchar(6) constraint pk_aeronave primary key not null,
 cnpjCompAerea varchar(14) foreign key references companhiaAerea(cnpj) not null,
 capacidade int not null,
-ultimaVenda date not null,
+ultimaVenda datetime not null,
 situacao char(1),
-dataCadastro date not null,
+dataCadastrotime date not null,
 );
 
 
@@ -111,6 +107,7 @@ BEGIN
 	UPDATE dbo.passagem SET situacao = 'C' WHERE idVoo = @idVoo
 END
 
+--trigger para incremento de assentos ocupados a acada venda de passagem em voo
 create trigger AssenctosOcupados on passagem
 after update
 as if
