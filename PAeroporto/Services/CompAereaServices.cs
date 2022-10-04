@@ -7,9 +7,9 @@ using Models;
 
 namespace Services
 {
-    internal class CompanhiaAereaServices
+    internal class CompAereaServices
     {
-        public static void Insert(CompanhiaAerea CompAerea)
+        public static void Insert(CompAerea CompAerea)
         {
 
         }
