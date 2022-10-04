@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    internal class CompanhiaAerea
+    public class CompanhiaAerea
     {
         public string CNPJ { get; set; }
         public string RazaoSocial { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    internal class Voo
+    public class Voo
     {
         public string Destino { get; set; }
         public DateTime DataVoo { get; set; } // Data 8 dígitos + 4 dígitos da hora

@@ -7,23 +7,24 @@ using Models;
 
 namespace Services
 {
-    internal class AeronaveServices
+    internal class VendaService
     {
-        public static void Insert(Aeronave aeronave)
+        public static void Insert(Venda venda)
         {
 
         }
-        public static void Select(Aeronave aeronave)
+        public static void Select(Venda venda)
         {
 
         }
-        public static void Update(Aeronave aeronave)
+        public static void Update(Venda venda)
         {
 
         }
-        public static void Delete(Aeronave aeronave)
+        public static void Delete(Venda venda)
         {
 
         }
+
     }
 }

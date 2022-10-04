@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    internal class Aeronave
+    public class Aeronave
     {
         public String Inscricao { get; set; }
         public int Capacidade { get; set; } //3 digitos numericos
