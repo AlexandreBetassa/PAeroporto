@@ -10,7 +10,8 @@ namespace Models
     {
         public int idVenda { get; set; }
         public DateTime DataVenda { get; set; }
-        public String CpfPassageiro { get; set; }
+        public Passageiro Passageiro { get; set; }
         public float ValorTotal { get; set; }
+        public ItemVenda Item { get; set; }
     }
 }
