@@ -12,7 +12,7 @@ namespace Services
         public static Passageiro Insert(Passageiro passageiro)
         {
             string insert = $"INSERT INTO dbo.passageiro (cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao)" +
-                $" VALUES (@cpf, @nome, @dataNasc, @sexo, @ultimaCompra, @dataCad, @situacao);";
+                            $" VALUES (@cpf, @nome, @dataNasc, @sexo, @ultimaCompra, @dataCad, @situacao);";
             SqlCommand sql_insert = new();
             sql_insert.Parameters.Add(new SqlParameter("@cpf", passageiro.CPF));
             sql_insert.Parameters.Add(new SqlParameter("@nome", passageiro.Nome));
@@ -57,15 +57,32 @@ namespace Services
             return list;
         }
 
-
         public static void Update(Passageiro passageiro)
         {
+            string update = $"UPDATE dbo.passageiro nome = @nome, dataNasc = @dataNasc, sexo = @sexo, situacao = @situacao WHERE cpf = @cpf ;";
+            SqlCommand sql_update = new();
+            sql_update.Parameters.Add(new SqlParameter("@cpf", passageiro.CPF));
+            sql_update.Parameters.Add(new SqlParameter("@nome", passageiro.Nome));
+            sql_update.Parameters.Add(new SqlParameter("@dataNasc", passageiro.DataNascimento));
+            sql_update.Parameters.Add(new SqlParameter("@sexo", passageiro.Sexo));
+            sql_update.Parameters.Add(new SqlParameter("@situacao", passageiro.Situacao));
 
+            sql_update.Connection = DataBase.OpenConnection();
+            sql_update.CommandText = update;
+            sql_update.ExecuteNonQuery();
+            DataBase.CloseConnection(sql_update.Connection);
         }
 
         public static void Delete(Passageiro passageiro)
         {
+            string delete = $"DELETE FROM dbo.passageiro WHERE cpf = @cpf";
+            SqlCommand sql_delete = new();
+            sql_delete.Parameters.Add(new SqlParameter("@cpf", passageiro.CPF));
 
+            sql_delete.Connection = DataBase.OpenConnection();
+            sql_delete.CommandText = delete;
+            sql_delete.ExecuteNonQuery();
+            DataBase.CloseConnection(sql_delete.Connection);
         }
     }
 }
