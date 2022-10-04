@@ -13,17 +13,11 @@ namespace PAeroporto
         public String CPF { get; set; } //prop CHAVE com 11 dígitos
         public String Nome { get; set; } // < 50 digitos
         public DateTime DataNascimento { get; set; }
-        public Char Sexo { get; set; } //M F N
+        public String Sexo { get; set; } //M F N
         public DateTime UltimaCompra { get; set; } //no cadastro, data atual
         public DateTime DataCadastro { get; set; }
-        public Char Situacao { get; set; } //A - Ativo I - Inativo
+        public String Situacao { get; set; } //A - Ativo I - Inativo
 
-        public Passageiro()
-        {
-            UltimaCompra = DateTime.Now;
-            DataCadastro = DateTime.Now;
-            Situacao = 'A';
-        }
         public void CadastrarPassageiro()
         {
 
@@ -59,7 +53,8 @@ namespace PAeroporto
             string cpf = Utils.ColetarString("Informe CPF: ");
             Db_Aeroporto db = new Db_Aeroporto();
             string sql = $"SELECT cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao from dbo.passageiro where cpf = '{cpf}'";
-            if (!db.SelectTable(sql)) return;
+            var passageiro = db.SelectTable(sql);
+            Console.WriteLine(passageiro[0]);
             Console.WriteLine("Escolha entre as opções, o/os dados que deseja editar em seu cadastro: ");
             Console.WriteLine("1 - Editar NOME cadastrado");
             Console.WriteLine("2 - Editar SEXO cadastrado");
@@ -131,7 +126,7 @@ namespace PAeroporto
             while (!Utils.ValidarCpf(cpf));
             string sql = $"SELECT cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao from dbo.passageiro where cpf = '{cpf}'";
             Db_Aeroporto db = new Db_Aeroporto();
-            db.SelectTable(sql);
+            var passageiro = db.SelectTable(sql);
             Utils.Pause();
             return cpf;
         }

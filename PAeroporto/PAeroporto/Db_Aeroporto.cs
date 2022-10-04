@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Core;
 using Microsoft.Data.SqlClient;
 using Microsoft.Win32.SafeHandles;
 
@@ -139,41 +140,31 @@ namespace PAeroporto
             conn.Close();
             return true;
         }
-        public bool SelectTable(string sql)
+        public List<Passageiro> SelectTable(string sql)
         {
-            try
+            conn.Open();
+            List<Passageiro> list = new List<Passageiro>();
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            SqlDataReader r = cmd.ExecuteReader();
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                SqlDataReader r = cmd.ExecuteReader();
-                if (!r.HasRows)
+                while (r.Read())
                 {
-                    Console.WriteLine("CPF não encontrado!!!");
-                    conn.Close();
-                    return false;
+                    Passageiro passageiro = new();
+                    passageiro.Nome = r.GetString(1);
+                    passageiro.CPF = r.GetString(0);
+                    passageiro.DataNascimento = r.GetDateTime(2);
+                    passageiro.Sexo = r.GetString(3);
+                    passageiro.UltimaCompra = r.GetDateTime(4);
+                    passageiro.DataCadastro = r.GetDateTime(5);
+                    passageiro.Situacao = r.GetString(6);
+                    list.Add(passageiro);
                 }
-                else
-                {
-                    while (r.Read())
-                    {
-                        Console.WriteLine($"Nome: {r.GetString(1)}");
-                        Console.WriteLine($"CPF: {r.GetString(0)}");
-                        Console.WriteLine($"Data de nascimento: {r.GetDateTime(2).ToShortDateString()}");
-                        Console.WriteLine($"Sexo: {r.GetString(3)}");
-                        Console.WriteLine($"Ultima compra: {r.GetDateTime(4).ToShortDateString()}");
-                        Console.WriteLine($"Ultima data de cadastramento: {r.GetDateTime(5).ToShortDateString()}");
-                        Console.WriteLine($"Status (A - Ativo) (I - Inativo): {r.GetString(6)}");
-                        Console.WriteLine();
-                    }
-                }
-            }
-            catch (SqlException msg)
-            {
-                Console.WriteLine(msg.Number);
             }
             conn.Close();
-            return true;
+            return list;
         }
+
+
         public bool SelectTableCA(string sql)
         {
             bool aux = false;
