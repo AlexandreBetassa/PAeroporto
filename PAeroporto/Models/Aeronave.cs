@@ -9,11 +9,10 @@ namespace Models
     public class Aeronave
     {
         public String Inscricao { get; set; }
-        public int Capacidade { get; set; } //3 digitos numericos
-        public int AssentosOcupados { get; set; } //3 digitos numericos
-        public DateTime UltimaVenda { get; set; } //no cad, dt atual
-        public DateTime DataCadastro { get; set; } //dt atual
+        public int Capacidade { get; set; } 
+        public DateTime UltimaVenda { get; set; } 
+        public DateTime DataCadastro { get; set; } 
         public char Situacao { get; set; }
-        public CompAerea Companhia { get; set; }
+        public String Companhia { get; set; }
     }
 }

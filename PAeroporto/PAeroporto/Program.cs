@@ -9,6 +9,8 @@ using System.Net.WebSockets;
 using System.Text;
 using Microsoft.Data.SqlClient;
 using PAeroporto;
+using Models;
+using Services;
 
 namespace PAeroporto
 {
@@ -17,51 +19,55 @@ namespace PAeroporto
         static void Main(string[] args)
         {
 
-            int op;
-            do
-            {
-                op = Menu();
-                switch (op)
-                {
-                    case 1:
-                        Console.Clear();
-                        MenuPassageiro();
-                        break;
-                    case 2:
-                        Console.Clear();
-                        MenuCompanhia();
-                        break;
-                    case 3:
-                        Console.Clear();
-                        MenuAeronave();
-                        break;
-                    case 4:
-                        Console.Clear();
-                        MenuVoo();
-                        break;
-                    case 5:
-                        Console.Clear();
-                        MenuVenda();
-                        break;
-                    //case 6:
-                    //    Console.Clear();
-                    //    MenuVenda(listaVendas, listaPassageiros);
-                    //    break;
-                    //case 7:
-                    //    Console.Clear();
-                    //    MenuItemVenda(listaItemVendas, listaPassagensVoos);
-                    //    break;
-                    case 0:
-                        Console.Clear();
-                        Console.WriteLine("### SAIR ###");
-                        Environment.Exit(0);
-                        break;
-                    default:
-                        Console.Clear();
-                        Console.WriteLine("Opção Inválida! Digite opção válida.");
-                        break;
-                }
-            } while (true);
+
+
+            #region
+            //    int op;
+            //    do
+            //    {
+            //        op = Menu();
+            //        switch (op)
+            //        {
+            //            case 1:
+            //                Console.Clear();
+            //                MenuPassageiro();
+            //                break;
+            //            case 2:
+            //                Console.Clear();
+            //                MenuCompanhia();
+            //                break;
+            //            case 3:
+            //                Console.Clear();
+            //                MenuAeronave();
+            //                break;
+            //            case 4:
+            //                Console.Clear();
+            //                MenuVoo();
+            //                break;
+            //            case 5:
+            //                Console.Clear();
+            //                MenuVenda();
+            //                break;
+            //            //case 6:
+            //            //    Console.Clear();
+            //            //    MenuVenda(listaVendas, listaPassageiros);
+            //            //    break;
+            //            //case 7:
+            //            //    Console.Clear();
+            //            //    MenuItemVenda(listaItemVendas, listaPassagensVoos);
+            //            //    break;
+            //            case 0:
+            //                Console.Clear();
+            //                Console.WriteLine("### SAIR ###");
+            //                Environment.Exit(0);
+            //                break;
+            //            default:
+            //                Console.Clear();
+            //                Console.WriteLine("Opção Inválida! Digite opção válida.");
+            //                break;
+            //        }
+            //    } while (true);
+            #endregion
         }
 
         #region Menus
@@ -78,66 +84,66 @@ namespace PAeroporto
             Console.WriteLine("0 - Sair do Menu Principal");
             return Utils.ColetarValorInt("Informe opção: ");
         }
-        static void MenuPassageiro()
-        {
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("### AREA DO PASSAGEIRO ###");
-                int op = Utils.ColetarValorInt("(0 - Retornar ao menu anterior)\n(1 - Cadastrar novo passageiro)\n(2 - Localizar Passageiro)\n" +
-                    "(3 - Editar PAssageiro)\n(4 - Listar Passageiros Ativos)\n(5 - Listar Passageiros Inativos)\n(6 - Cadastrar CPF restrito)\n" +
-                    "(7 - Remover CPF da lista de restritos)\n(8 - Listar CPFs restritos)\nInforme opção desejada: ");
-                switch (op)
-                {
-                    case 0:
-                        return;
+        //static void MenuPassageiro()
+        //{
+        //    do
+        //    {
+        //        Console.Clear();
+        //        Console.WriteLine("### AREA DO PASSAGEIRO ###");
+        //        int op = Utils.ColetarValorInt("(0 - Retornar ao menu anterior)\n(1 - Cadastrar novo passageiro)\n(2 - Localizar Passageiro)\n" +
+        //            "(3 - Editar PAssageiro)\n(4 - Listar Passageiros Ativos)\n(5 - Listar Passageiros Inativos)\n(6 - Cadastrar CPF restrito)\n" +
+        //            "(7 - Remover CPF da lista de restritos)\n(8 - Listar CPFs restritos)\nInforme opção desejada: ");
+        //        switch (op)
+        //        {
+        //            case 0:
+        //                return;
 
-                    case 1:
-                        Passageiro passageiro = new Passageiro();
-                        passageiro.CadastrarPassageiro();
-                        break;
-                    case 2:
-                        Passageiro.Localizar();
-                        break;
-                    case 3:
-                        Passageiro.Editar();
-                        break;
-                    case 4:
-                        Console.Clear();
-                        Console.WriteLine("### LISTAR PASSAGEIROS ATIVOS ###\n");
-                        Passageiro.Listar('A');
-                        break;
-                    case 5:
-                        Console.Clear();
-                        Console.WriteLine("### LISTAR PASSAGEIROS INATIVOS ###\n");
-                        Passageiro.Listar('I');
-                        break;
-                    case 6:
-                        Console.Clear();
-                        Console.WriteLine("### Cadastrar CPF restrito ###\n");
-                        CadastrarCpfRestrito();
-                        Utils.Pause();
-                        break;
-                    case 7:
-                        Console.Clear();
-                        Console.WriteLine("### REMOVER CPF RESTRITO ###\n");
-                        RemoverCpfRestrito();
-                        Utils.Pause();
-                        break;
-                    case 8:
-                        Console.Clear();
-                        Console.WriteLine("### LISTAR CPFs RESTRITO ###\n");
-                        Db_Aeroporto db = new Db_Aeroporto();
-                        if (!db.SelectRestritos("SELECT cpf FROM dbo.restritos")) Console.WriteLine("Não há CPFs inscritos nessa lista"); ;
-                        Utils.Pause();
-                        break;
-                    default:
-                        Console.WriteLine("Opção inválida...");
-                        Utils.Pause();
-                        break;
-                }
-            } while (true);
-        }
+        //            case 1:
+        //                Passageiro passageiro = new Passageiro();
+        //                passageiro.CadastrarPassageiro();
+        //                break;
+        //            case 2:
+        //                Passageiro.Localizar();
+        //                break;
+        //            case 3:
+        //                Passageiro.Editar();
+        //                break;
+        //            case 4:
+        //                Console.Clear();
+        //                Console.WriteLine("### LISTAR PASSAGEIROS ATIVOS ###\n");
+        //                Passageiro.Listar('A');
+        //                break;
+        //            case 5:
+        //                Console.Clear();
+        //                Console.WriteLine("### LISTAR PASSAGEIROS INATIVOS ###\n");
+        //                Passageiro.Listar('I');
+        //                break;
+        //            case 6:
+        //                Console.Clear();
+        //                Console.WriteLine("### Cadastrar CPF restrito ###\n");
+        //                CadastrarCpfRestrito();
+        //                Utils.Pause();
+        //                break;
+        //            case 7:
+        //                Console.Clear();
+        //                Console.WriteLine("### REMOVER CPF RESTRITO ###\n");
+        //                RemoverCpfRestrito();
+        //                Utils.Pause();
+        //                break;
+        //            case 8:
+        //                Console.Clear();
+        //                Console.WriteLine("### LISTAR CPFs RESTRITO ###\n");
+        //                Db_Aeroporto db = new Db_Aeroporto();
+        //                if (!db.SelectRestritos("SELECT cpf FROM dbo.restritos")) Console.WriteLine("Não há CPFs inscritos nessa lista"); ;
+        //                Utils.Pause();
+        //                break;
+        //            default:
+        //                Console.WriteLine("Opção inválida...");
+        //                Utils.Pause();
+        //                break;
+        //        }
+        //    } while (true);
+        //}
         public static void MenuCompanhia()
         {
             int opc;

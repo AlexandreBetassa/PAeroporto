@@ -16,12 +16,8 @@ namespace Services
                 $" VALUES (@dataVenda, @passageiro, @valorTotal);";
             SqlCommand sql_insert = new();
             sql_insert.Parameters.Add(new SqlParameter("@dataVenda", DateTime.Now));
-            sql_insert.Parameters.Add(new SqlParameter("@passageiro", ));
-            sql_insert.Parameters.Add(new SqlParameter("@dataNasc", passageiro.DataNascimento));
-            sql_insert.Parameters.Add(new SqlParameter("@sexo", passageiro.Sexo));
-            sql_insert.Parameters.Add(new SqlParameter("@ultimaCompra", DateTime.Now));
-            sql_insert.Parameters.Add(new SqlParameter("@dataCad", DateTime.Now));
-            sql_insert.Parameters.Add(new SqlParameter("@situacao", 'A'));
+            sql_insert.Parameters.Add(new SqlParameter("@passageiro", venda.Passageiro));
+            sql_insert.Parameters.Add(new SqlParameter("@dataNasc", venda.ValorTotal));
 
             sql_insert.Connection = DataBase.OpenConnection();
             sql_insert.CommandText = insert;
@@ -30,8 +26,37 @@ namespace Services
 
             return venda;
         }
-        public static void Select(Venda venda)
+        public static List<Venda> Select(Venda venda)
         {
+            List<Venda> vendaList = new();
+            
+            string select = $"SELECT cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao FROM dbo.passageiro WHERE cpf = @cpf";
+            SqlCommand sql_select = new()
+            {
+                CommandText = select,
+                Connection = DataBase.OpenConnection()
+            };
+            sql_select.Parameters.Add(new SqlParameter("@cpf", cpf));
+            SqlDataReader r = sql_select.ExecuteReader();
+            {
+                while (r.Read())
+                {
+                    Passageiro passageiro = new()
+                    {
+                        Nome = r.GetString(1),
+                        CPF = r.GetString(0),
+                        DataNascimento = r.GetDateTime(2),
+                        Sexo = r.GetString(3),
+                        UltimaCompra = r.GetDateTime(4),
+                        DataCadastro = r.GetDateTime(5),
+                        Situacao = r.GetString(6)
+                    };
+                    list.Add(passageiro);
+                }
+            }
+            DataBase.CloseConnection(sql_select.Connection);
+            return vendaList;
+
 
         }
         public static void Update(Venda venda)

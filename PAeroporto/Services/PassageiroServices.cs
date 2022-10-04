@@ -8,7 +8,6 @@ namespace Services
 {
     public class PassageiroServices
     {
-
         public static Passageiro Insert(Passageiro passageiro)
         {
             string insert = $"INSERT INTO dbo.passageiro (cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao)" +
@@ -29,14 +28,18 @@ namespace Services
 
             return passageiro;
         }
-
-        public static List<Passageiro> Select(string sql)
+        public static List<Passageiro> Select(string cpf)
         {
-            SqlConnection conn = DataBase.OpenConnection();
             List<Passageiro> list = new();
 
-            SqlCommand cmd = new(sql, conn);
-            SqlDataReader r = cmd.ExecuteReader();
+            string select = $"SELECT cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao FROM dbo.passageiro WHERE cpf = @cpf";
+            SqlCommand sql_select = new()
+            {
+                CommandText = select,
+                Connection = DataBase.OpenConnection()
+            };
+            sql_select.Parameters.Add(new SqlParameter("@cpf", cpf));
+            SqlDataReader r = sql_select.ExecuteReader();
             {
                 while (r.Read())
                 {
@@ -53,34 +56,33 @@ namespace Services
                     list.Add(passageiro);
                 }
             }
-            conn.Close();
+            DataBase.CloseConnection(sql_select.Connection);
             return list;
         }
-
         public static void Update(Passageiro passageiro)
         {
-            string update = $"UPDATE dbo.passageiro nome = @nome, dataNasc = @dataNasc, sexo = @sexo, situacao = @situacao WHERE cpf = @cpf ;";
-            SqlCommand sql_update = new();
-            sql_update.Parameters.Add(new SqlParameter("@cpf", passageiro.CPF));
-            sql_update.Parameters.Add(new SqlParameter("@nome", passageiro.Nome));
-            sql_update.Parameters.Add(new SqlParameter("@dataNasc", passageiro.DataNascimento));
-            sql_update.Parameters.Add(new SqlParameter("@sexo", passageiro.Sexo));
-            sql_update.Parameters.Add(new SqlParameter("@situacao", passageiro.Situacao));
-
-            sql_update.Connection = DataBase.OpenConnection();
-            sql_update.CommandText = update;
+            string update =
+                $"UPDATE dbo.passageiro " +
+                $"SET nome = {new SqlParameter("@nome", passageiro.Nome)}, dataNasc = {new SqlParameter("@dataNasc", passageiro.DataNascimento)}," +
+                $"sexo = {new SqlParameter("@sexo", passageiro.Sexo)}, situacao = {new SqlParameter("@situacao", passageiro.Situacao)} " +
+                $"WHERE cpf = {new SqlParameter("@cpf", passageiro.CPF)};";
+            SqlCommand sql_update = new()
+            {
+                CommandText = update,
+                Connection = DataBase.OpenConnection()
+            };
             sql_update.ExecuteNonQuery();
             DataBase.CloseConnection(sql_update.Connection);
         }
-
         public static void Delete(Passageiro passageiro)
         {
-            string delete = $"DELETE FROM dbo.passageiro WHERE cpf = @cpf";
-            SqlCommand sql_delete = new();
-            sql_delete.Parameters.Add(new SqlParameter("@cpf", passageiro.CPF));
+            string delete = $"DELETE FROM dbo.passageiro WHERE cpf = {new SqlParameter("@cpf", passageiro.CPF)}";
+            SqlCommand sql_delete = new()
+            {
+                Connection = DataBase.OpenConnection(),
+                CommandText = delete
+            };
 
-            sql_delete.Connection = DataBase.OpenConnection();
-            sql_delete.CommandText = delete;
             sql_delete.ExecuteNonQuery();
             DataBase.CloseConnection(sql_delete.Connection);
         }

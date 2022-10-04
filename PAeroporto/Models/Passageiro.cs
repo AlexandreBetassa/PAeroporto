@@ -11,5 +11,10 @@ namespace Models
         public DateTime UltimaCompra { get; set; } //no cadastro, data atual
         public DateTime DataCadastro { get; set; }
         public String Situacao { get; set; } //A - Ativo I - Inativo
+
+        public override string ToString()
+        {
+            return ($"CPF: {CPF}\nNOME: {Nome}\nDATA DE NASCIMENTO: {DataNascimento}\nSEXO: {Sexo}\nÚLTIMA COMPRA: {UltimaCompra}\nDATA EM QUE O CADASTRO FOI REALIZADO: {DataCadastro}\nSITUAÇÃO DO CADASTRO (A - ATIVO, I - INATIVO): {Situacao}").ToString();
+        }
     }
 }

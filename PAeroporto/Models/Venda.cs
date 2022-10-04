@@ -8,10 +8,9 @@ namespace Models
 {
     public class Venda
     {
-        public int idVenda { get; set; }
+        public int IdVenda { get; set; }
         public DateTime DataVenda { get; set; }
-        public Passageiro Passageiro { get; set; }
+        public String Passageiro { get; set; }
         public float ValorTotal { get; set; }
-        public ItemVenda Item { get; set; }
     }
 }
