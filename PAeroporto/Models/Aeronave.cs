@@ -14,6 +14,6 @@ namespace Models
         public DateTime UltimaVenda { get; set; } //no cad, dt atual
         public DateTime DataCadastro { get; set; } //dt atual
         public char Situacao { get; set; }
-        public CompAerea Companhia { get; set; }
+        public String Companhia { get; set; }
     }
 }
