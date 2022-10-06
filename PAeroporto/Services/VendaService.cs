@@ -10,7 +10,7 @@ namespace Services
 {
     internal class VendaService
     {
-        public static Venda Insert(Venda venda)
+        public static List<Venda> Insert(Venda venda)
         {
             string insert = $"INSERT INTO dbo.venda (dataVenda, passageiroCpf, valorTotal)" +
                 $" VALUES (@dataVenda, @passageiro, @valorTotal);";
@@ -21,33 +21,28 @@ namespace Services
 
             sql_insert.Connection = DataBase.OpenConnection();
             sql_insert.CommandText = insert;
-            sql_insert.ExecuteNonQuery();
+            var retorno = sql_insert.ExecuteScalar();
             DataBase.CloseConnection(sql_insert.Connection);
 
-            return venda;
+            return (List<Venda>)retorno;
         }
         public static List<Venda> Select(int id)
         {
             List<Venda> vendaList = new();
             string select = $"SELECT id, dataVenda, passageiroCpf, valorTotal FROM dbo.venda WHERE id = @id";
-            SqlCommand sql_select = new()
-            {
-                CommandText = select,
-                Connection = DataBase.OpenConnection()
-            };
+            SqlCommand sql_select = new() { CommandText = select, Connection = DataBase.OpenConnection() };
             sql_select.Parameters.Add(new SqlParameter("@id", id));
             SqlDataReader r = sql_select.ExecuteReader();
             {
                 while (r.Read())
                 {
-                    Venda venda = new()
+                    vendaList.Add(new()
                     {
                         IdVenda = r.GetInt32(0),
                         DataVenda = r.GetDateTime(1),
                         Passageiro = r.GetString(2),
                         ValorTotal = r.GetFloat(3)
-                    };
-                    vendaList.Add(venda);
+                    });
                 }
             }
             DataBase.CloseConnection(sql_select.Connection);
@@ -68,6 +63,5 @@ namespace Services
             sql_delete.ExecuteNonQuery();
             DataBase.CloseConnection(sql_delete.Connection);
         }
-
     }
 }

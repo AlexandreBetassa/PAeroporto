@@ -8,6 +8,7 @@ namespace Models
 {
     public class Voo
     {
+        public int IdVoo { get; set; }
         public string Destino { get; set; }
         public DateTime DataVoo { get; set; } // Data 8 dígitos + 4 dígitos da hora
         public DateTime DataCadastro { get; set; }
