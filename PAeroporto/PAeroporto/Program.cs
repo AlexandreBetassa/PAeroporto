@@ -211,94 +211,94 @@ namespace PAeroporto
         }
         public static void MenuAeronave()
         {
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("### MENU AERONAVE ###");
-                Console.WriteLine("0 - Sair do Menu de Aeronaves");
-                Console.WriteLine("1 - Cadastrar Aeronaves");
-                Console.WriteLine("2 - Listar Aeronaves");
-                Console.WriteLine("3 - Editar Aeronave");
-                Console.WriteLine("4 - Consultar Aeronave");
-                int opc = Utils.ColetarValorInt("Informe opção: ");
+            //    do
+            //    {
+            //        Console.Clear();
+            //        Console.WriteLine("### MENU AERONAVE ###");
+            //        Console.WriteLine("0 - Sair do Menu de Aeronaves");
+            //        Console.WriteLine("1 - Cadastrar Aeronaves");
+            //        Console.WriteLine("2 - Listar Aeronaves");
+            //        Console.WriteLine("3 - Editar Aeronave");
+            //        Console.WriteLine("4 - Consultar Aeronave");
+            //        int opc = Utils.ColetarValorInt("Informe opção: ");
 
-                switch (opc)
-                {
-                    case 1:
-                        AeronaveView aeronave = new AeronaveView();
-                        aeronave.CadastroAeronave();
-                        break;
-                    case 2:
-                        Console.Clear();
-                        Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
-                        AeronaveView.Listar();
-                        break;
-                    case 3:
-                        Console.Clear();
-                        Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
-                        AeronaveView.EditarAeronave();
-                        break;
-                    case 4:
-                        Console.Clear();
-                        Console.WriteLine("### BUSCAR AERONAVE ###");
-                        string inscricao = Utils.ColetarString("Informe a inscrição da aeronave que deseja consultar: ");
-                        AeronaveView.Listar(inscricao);
-                        break;
-                    case 0:
-                        return;
-                    default:
-                        Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
-                        break;
-                }
-                Utils.Pause();
-            } while (true);
-        }
-        public static void MenuVoo()
-        {
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("### VOOS ###");
-                Console.WriteLine("1 - Cadastrar Voo");
-                Console.WriteLine("2 - Buscar Voo");
-                Console.WriteLine("3 - Editar Voo");
-                Console.WriteLine("4 - Listar Voos Ativos");
-                Console.WriteLine("0 - Sair do Menu de Voos");
-                int opc = Utils.ColetarValorInt("Opção: ");
+            //        switch (opc)
+            //        {
+            //            case 1:
+            //                AeronaveView aeronave = new AeronaveView();
+            //                aeronave.CadastroAeronave();
+            //                break;
+            //            case 2:
+            //                Console.Clear();
+            //                Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
+            //                AeronaveView.Listar();
+            //                break;
+            //            case 3:
+            //                Console.Clear();
+            //                Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
+            //                AeronaveView.EditarAeronave();
+            //                break;
+            //            case 4:
+            //                Console.Clear();
+            //                Console.WriteLine("### BUSCAR AERONAVE ###");
+            //                string inscricao = Utils.ColetarString("Informe a inscrição da aeronave que deseja consultar: ");
+            //                AeronaveView.Listar(inscricao);
+            //                break;
+            //            case 0:
+            //                return;
+            //            default:
+            //                Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
+            //                break;
+            //        }
+            //        Utils.Pause();
+            //    } while (true);
+            //}
+            //public static void MenuVoo()
+            //{
+            //    do
+            //    {
+            //        Console.Clear();
+            //        Console.WriteLine("### VOOS ###");
+            //        Console.WriteLine("1 - Cadastrar Voo");
+            //        Console.WriteLine("2 - Buscar Voo");
+            //        Console.WriteLine("3 - Editar Voo");
+            //        Console.WriteLine("4 - Listar Voos Ativos");
+            //        Console.WriteLine("0 - Sair do Menu de Voos");
+            //        int opc = Utils.ColetarValorInt("Opção: ");
 
-                switch (opc)
-                {
-                    case 1:
-                        Console.Clear();
-                        Console.WriteLine("### CADASTRAR NOVO VOO ###");
-                        VooView voo = new VooView();
-                        voo.CadastrarVoo();
-                        break;
-                    case 2:
-                        Console.Clear();
-                        Console.WriteLine("### CONSULTAR VOO ###");
-                        string numeroVoo = Utils.ColetarString("Informe a identificação do voo EX: (V0000): ").PadRight(5, '0');
-                        if (!int.TryParse(numeroVoo.Substring(1, 4), out int idVoo)) Console.WriteLine("A identificação do voo foi digitada incorretamente");
-                        else VooView.Buscar(idVoo);
-                        break;
-                    case 3:
-                        Console.Clear();
-                        Console.WriteLine("### EDITAR VOO ###");
-                        VooView.EditarVoo();
-                        break;
-                    case 4:
-                        Console.Clear();
-                        Console.WriteLine("### LISTAR VOOS ATIVOS ###");
-                        VooView.Buscar('A');
-                        break;
-                    case 0:
-                        return;
-                    default:
-                        Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
-                        break;
-                }
-                Utils.Pause();
-            } while (true);
+            //        switch (opc)
+            //        {
+            //            case 1:
+            //                Console.Clear();
+            //                Console.WriteLine("### CADASTRAR NOVO VOO ###");
+            //                VooView voo = new VooView();
+            //                VooView.CadastrarVoo();
+            //                break;
+            //            case 2:
+            //                Console.Clear();
+            //                Console.WriteLine("### CONSULTAR VOO ###");
+            //                string numeroVoo = Utils.ColetarString("Informe a identificação do voo EX: (V0000): ").PadRight(5, '0');
+            //                if (!int.TryParse(numeroVoo.Substring(1, 4), out int idVoo)) Console.WriteLine("A identificação do voo foi digitada incorretamente");
+            //                else VooView.Buscar(idVoo);
+            //                break;
+            //            case 3:
+            //                Console.Clear();
+            //                Console.WriteLine("### EDITAR VOO ###");
+            //                VooView.EditarVoo();
+            //                break;
+            //            case 4:
+            //                Console.Clear();
+            //                Console.WriteLine("### LISTAR VOOS ATIVOS ###");
+            //                VooView.Buscar('A');
+            //                break;
+            //            case 0:
+            //                return;
+            //            default:
+            //                Console.WriteLine("Opção Inválida! Favor selecionar uma das opções acima!");
+            //                break;
+            //        }
+            //        Utils.Pause();
+            //    } while (true);
         }
         public static void MenuVenda()
         {
