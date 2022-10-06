@@ -8,25 +8,16 @@ namespace Services
 {
     public class PassageiroServices
     {
-        public static Passageiro Insert(Passageiro passageiro)
+        public static void Insert(Passageiro passageiro)
         {
             string insert = $"INSERT INTO dbo.passageiro (cpf, nome, dataNasc, sexo, ultimaCompra, dataCad, situacao)" +
-                            $" VALUES (@cpf, @nome, @dataNasc, @sexo, @ultimaCompra, @dataCad, @situacao);";
-            SqlCommand sql_insert = new();
-            sql_insert.Parameters.Add(new SqlParameter("@cpf", passageiro.CPF));
-            sql_insert.Parameters.Add(new SqlParameter("@nome", passageiro.Nome));
-            sql_insert.Parameters.Add(new SqlParameter("@dataNasc", passageiro.DataNascimento));
-            sql_insert.Parameters.Add(new SqlParameter("@sexo", passageiro.Sexo));
-            sql_insert.Parameters.Add(new SqlParameter("@ultimaCompra", DateTime.Now));
-            sql_insert.Parameters.Add(new SqlParameter("@dataCad", DateTime.Now));
-            sql_insert.Parameters.Add(new SqlParameter("@situacao", 'A'));
+                            $" VALUES ({new SqlParameter("@cpf", passageiro.CPF)}, {new SqlParameter("@nome", passageiro.Nome)}, {new SqlParameter("@dataNasc", passageiro.DataNascimento)}, " +
+                            $"{new SqlParameter("@sexo", passageiro.Sexo)}, {new SqlParameter("@ultimaCompra", DateTime.Now)}, {new SqlParameter("@dataCad", DateTime.Now)}, " +
+                            $"{new SqlParameter("@situacao", 'A')});";
+            SqlCommand sql_insert = new() { Connection = DataBase.OpenConnection(), CommandText = insert };
 
-            sql_insert.Connection = DataBase.OpenConnection();
-            sql_insert.CommandText = insert;
             sql_insert.ExecuteNonQuery();
             DataBase.CloseConnection(sql_insert.Connection);
-
-            return passageiro;
         }
         public static List<Passageiro> Select(string cpf)
         {

@@ -10,21 +10,17 @@ namespace Services
 {
     internal class VendaService
     {
-        public static List<Venda> Insert(Venda venda)
+        public static void Insert(Venda venda)
         {
-            string insert = $"INSERT INTO dbo.venda (dataVenda, passageiroCpf, valorTotal)" +
-                $" VALUES (@dataVenda, @passageiro, @valorTotal);";
-            SqlCommand sql_insert = new();
+            string insert = $"INSERT INTO dbo.venda (dataVenda, passageiroCpf, valorTotal) " +
+                            $"VALUES (@dataVenda, @passageiro, @valorTotal);";
+            SqlCommand sql_insert = new() { Connection = DataBase.OpenConnection(), CommandText = insert };
             sql_insert.Parameters.Add(new SqlParameter("@dataVenda", DateTime.Now));
             sql_insert.Parameters.Add(new SqlParameter("@passageiro", venda.Passageiro));
             sql_insert.Parameters.Add(new SqlParameter("@dataNasc", venda.ValorTotal));
 
-            sql_insert.Connection = DataBase.OpenConnection();
-            sql_insert.CommandText = insert;
-            var retorno = sql_insert.ExecuteScalar();
+            sql_insert.ExecuteNonQuery();
             DataBase.CloseConnection(sql_insert.Connection);
-
-            return (List<Venda>)retorno;
         }
         public static List<Venda> Select(int id)
         {

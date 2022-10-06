@@ -11,32 +11,22 @@ namespace Services
 {
     internal class AeronaveServices
     {
-        public static Aeronave Insert(Aeronave aeronave)
+        public static void Insert(Aeronave aeronave)
         {
             string insert = $"INSERT INTO dbo.aeronave (inscAeronave, cnpjCompAerea, capacidade, ultimaVenda, situacao, dataCadastro)" +
-                $" VALUES ({new SqlParameter("@inscricao", aeronave.Inscricao)}, {new SqlParameter("@companhia", aeronave.Companhia)}, " +
-                $"{new SqlParameter("@capacidade", aeronave.Capacidade)}, {new SqlParameter("@ultimaVenda", DateTime.Now)}, {new SqlParameter("@situacao", 'A')}, " +
-                $"{new SqlParameter("@dataCadastro", DateTime.Now)});";
-            SqlCommand sql_insert = new()
-            {
-                Connection = DataBase.OpenConnection(),
-                CommandText = insert
-            };
+                            $" VALUES ({new SqlParameter("@inscricao", aeronave.Inscricao)}, {new SqlParameter("@companhia", aeronave.Companhia)}, " +
+                            $"{new SqlParameter("@capacidade", aeronave.Capacidade)}, {new SqlParameter("@ultimaVenda", DateTime.Now)}, {new SqlParameter("@situacao", 'A')}, " +
+                            $"{new SqlParameter("@dataCadastro", DateTime.Now)});";
+            SqlCommand sql_insert = new() { Connection = DataBase.OpenConnection(), CommandText = insert };
             sql_insert.ExecuteNonQuery();
             DataBase.CloseConnection(sql_insert.Connection);
-
-            return aeronave;
         }
         public static List<Aeronave> Select(int inscricao)
         {
             List<Aeronave> lstAeronave = new();
             string select = $"SELECT inscAeronave, cnpjCompAerea, capacidade, ultimaVenda, situacao, dataCadastro FROM dbo.aeronave WHERE inscAeronave = @inscricao";
 
-            SqlCommand sql_select = new()
-            {
-                CommandText = select,
-                Connection = DataBase.OpenConnection(),
-            };
+            SqlCommand sql_select = new() { CommandText = select, Connection = DataBase.OpenConnection() };
             sql_select.Parameters.Add(new SqlParameter("@inscricao", inscricao));
             SqlDataReader reader = sql_select.ExecuteReader();
             {
@@ -56,7 +46,7 @@ namespace Services
             DataBase.CloseConnection(sql_select.Connection);
             return lstAeronave;
         }
-        public static List<Aeronave> Update(Aeronave aeronave)
+        public static void Update(Aeronave aeronave)
         {
             string update = $"UPDATE dbo.aeronave SET capacidade = @capacidade, situacao = @situacao WHERE inscAeronave = @incricao;";
             SqlCommand sql_update = new();
@@ -68,8 +58,6 @@ namespace Services
             sql_update.CommandText = update;
             var aviao = sql_update.ExecuteScalar();
             DataBase.CloseConnection(sql_update.Connection);
-
-            return (List<Aeronave>)aviao;
         }
         public static void Delete(Aeronave aeronave)
         {

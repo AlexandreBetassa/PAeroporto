@@ -11,16 +11,15 @@ namespace Services
 {
     internal class VooService
     {
-        static List<Voo> Insert(Voo voo)
+        static void Insert(Voo voo)
         {
             string insert = $"INSERT INTO dbo.venda (assentosOcupado, destino, aeronave, dataVoo, dataCadastro, situacao)" +
                             $" VALUES ({new SqlParameter("@assentosOcupados", 0)}, {new SqlParameter("@destino", voo.Destino)}, " +
                             $"{new SqlParameter("@aeronave", voo.InscAeronave)}, {new SqlParameter("@dataVoo", voo.DataVoo)}, " +
                             $"{new SqlParameter("@dataCadastro", voo.DataCadastro)}, {new SqlParameter("@situacao", voo.Situacao)});";
             SqlCommand sql_insert = new() { Connection = DataBase.OpenConnection(), CommandText = insert };
-            var retorno = sql_insert.ExecuteScalar();
+            sql_insert.ExecuteNonQuery();
             DataBase.CloseConnection(sql_insert.Connection);
-            return (List<Voo>)retorno;
         }
         static List<Voo> Select(int id)
         {
