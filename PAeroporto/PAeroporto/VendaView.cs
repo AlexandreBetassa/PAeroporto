@@ -7,7 +7,7 @@ using PAeroporto;
 
 namespace PAeroporto
 {
-    internal class Venda
+    internal class VendaView
     {
         public int idVenda { get; set; }
         public DateTime DataVenda { get; set; }
@@ -15,7 +15,7 @@ namespace PAeroporto
         public float ValorTotal { get; set; }
 
 
-        public Venda()
+        public VendaView()
         {
             DataVenda = DateTime.Now;
         }
@@ -58,7 +58,7 @@ namespace PAeroporto
                     break;
                 }
                 Console.WriteLine("### VOOS ATIVOS ###");
-                Voo.Buscar('A');
+                VooView.Buscar('A');
                 int idVoo;
                 do
                 {

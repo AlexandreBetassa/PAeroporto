@@ -8,7 +8,7 @@ using PAeroporto;
 
 namespace PAeroporto
 {
-    internal class Aeronave
+    internal class AeronaveView
     {
         //CHAVE, PADRÃO ANAC, 6 DIGITOD ALFANUMERICOS
         public String Inscricao { get; set; }
@@ -19,7 +19,7 @@ namespace PAeroporto
         public char Situacao { get; set; }
         public String CNPJCompAerea { get; set; }
 
-        public Aeronave()
+        public AeronaveView()
         {
             DataCadastro = DateTime.Now;
             UltimaVenda = DateTime.Now;

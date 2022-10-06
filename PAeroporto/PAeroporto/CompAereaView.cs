@@ -8,7 +8,7 @@ using PAeroporto;
 
 namespace PAeroporto
 {
-    internal class CompanhiaAerea
+    internal class CompAereaView
     {
         public string CNPJ { get; set; }
         public string RazaoSocial { get; set; }
@@ -17,7 +17,7 @@ namespace PAeroporto
         public DateTime DataCadastro { get; set; }
         public char SituacaoCA { get; set; }
 
-        public CompanhiaAerea()
+        public CompAereaView()
         {
             UltimoVoo = DateTime.Now;
             DataCadastro = DateTime.Now;

@@ -10,7 +10,7 @@ using PAeroporto;
 
 namespace PAeroporto
 {
-    internal class Voo
+    internal class VooView
     {
         public string Destino { get; set; }
         public DateTime DataVoo { get; set; } // Data 8 dígitos + 4 dígitos da hora
@@ -19,7 +19,7 @@ namespace PAeroporto
         public String InscAeronave { get; set; }
         public int AssentosOcupados { get; set; }
 
-        public Voo()
+        public VooView()
         {
             DataCadastro = DateTime.Now;
             Situacao = 'A';

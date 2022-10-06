@@ -165,24 +165,24 @@ namespace PAeroporto
                 switch (opc)
                 {
                     case 1:
-                        CompanhiaAerea companhia = new CompanhiaAerea();
+                        CompAereaView companhia = new CompAereaView();
                         companhia.CadastrarCompainhaAerea();
                         break;
                     case 2:
-                        CompanhiaAerea.LocalizarCompanhiaAerea();
+                        CompAereaView.LocalizarCompanhiaAerea();
                         break;
                     case 3:
-                        CompanhiaAerea.Editar();
+                        CompAereaView.Editar();
                         break;
                     case 4:
                         Console.Clear();
                         Console.WriteLine("### LISTAR COMPANHIAS AÉREAS ATIVAS ###");
-                        CompanhiaAerea.ListarCompanhias('A');
+                        CompAereaView.ListarCompanhias('A');
                         break;
                     case 5:
                         Console.Clear();
                         Console.WriteLine("### LISTAR COMPANHIAS AÉREAS INATIVAS ###");
-                        CompanhiaAerea.ListarCompanhias('I');
+                        CompAereaView.ListarCompanhias('I');
                         break;
                     case 6:
                         Console.Clear();
@@ -225,24 +225,24 @@ namespace PAeroporto
                 switch (opc)
                 {
                     case 1:
-                        Aeronave aeronave = new Aeronave();
+                        AeronaveView aeronave = new AeronaveView();
                         aeronave.CadastroAeronave();
                         break;
                     case 2:
                         Console.Clear();
                         Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
-                        Aeronave.Listar();
+                        AeronaveView.Listar();
                         break;
                     case 3:
                         Console.Clear();
                         Console.WriteLine("### LISTAR TODAS AS AERONAVES ###");
-                        Aeronave.EditarAeronave();
+                        AeronaveView.EditarAeronave();
                         break;
                     case 4:
                         Console.Clear();
                         Console.WriteLine("### BUSCAR AERONAVE ###");
                         string inscricao = Utils.ColetarString("Informe a inscrição da aeronave que deseja consultar: ");
-                        Aeronave.Listar(inscricao);
+                        AeronaveView.Listar(inscricao);
                         break;
                     case 0:
                         return;
@@ -271,7 +271,7 @@ namespace PAeroporto
                     case 1:
                         Console.Clear();
                         Console.WriteLine("### CADASTRAR NOVO VOO ###");
-                        Voo voo = new Voo();
+                        VooView voo = new VooView();
                         voo.CadastrarVoo();
                         break;
                     case 2:
@@ -279,17 +279,17 @@ namespace PAeroporto
                         Console.WriteLine("### CONSULTAR VOO ###");
                         string numeroVoo = Utils.ColetarString("Informe a identificação do voo EX: (V0000): ").PadRight(5, '0');
                         if (!int.TryParse(numeroVoo.Substring(1, 4), out int idVoo)) Console.WriteLine("A identificação do voo foi digitada incorretamente");
-                        else Voo.Buscar(idVoo);
+                        else VooView.Buscar(idVoo);
                         break;
                     case 3:
                         Console.Clear();
                         Console.WriteLine("### EDITAR VOO ###");
-                        Voo.EditarVoo();
+                        VooView.EditarVoo();
                         break;
                     case 4:
                         Console.Clear();
                         Console.WriteLine("### LISTAR VOOS ATIVOS ###");
-                        Voo.Buscar('A');
+                        VooView.Buscar('A');
                         break;
                     case 0:
                         return;
@@ -315,17 +315,17 @@ namespace PAeroporto
                 switch (opc)
                 {
                     case 1:
-                        Venda venda = new Venda();
+                        VendaView venda = new VendaView();
                         venda.CadastrarVenda();
                         break;
                     case 2:
-                        Venda.Buscar();
+                        VendaView.Buscar();
                         break;
                     case 3:
-                        Venda.EditarPassagem();
+                        VendaView.EditarPassagem();
                         break;
                     case 4:
-                        Venda.ConsultarPassagem();
+                        VendaView.ConsultarPassagem();
                         break;
                     case 0:
                         Console.WriteLine("Você saiu do Menu de Vendas!");
